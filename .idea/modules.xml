@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/0xCombat/0xCombat.iml" filepath="$PROJECT_DIR$/0xCombat/0xCombat.iml" />
+      <module fileurl="file://$PROJECT_DIR$/0xCrafting/0xCrafting.iml" filepath="$PROJECT_DIR$/0xCrafting/0xCrafting.iml" />
+      <module fileurl="file://$PROJECT_DIR$/0xFishing/0xFishing.iml" filepath="$PROJECT_DIR$/0xFishing/0xFishing.iml" />
+      <module fileurl="file://$PROJECT_DIR$/0xGE/0xGE.iml" filepath="$PROJECT_DIR$/0xGE/0xGE.iml" />
+      <module fileurl="file://$PROJECT_DIR$/0xWoodcutting/0xWoodcutting.iml" filepath="$PROJECT_DIR$/0xWoodcutting/0xWoodcutting.iml" />
+      <module fileurl="file://$PROJECT_DIR$/RSPeer Scripts.iml" filepath="$PROJECT_DIR$/RSPeer Scripts.iml" />
+    </modules>
+  </component>
+</project>
