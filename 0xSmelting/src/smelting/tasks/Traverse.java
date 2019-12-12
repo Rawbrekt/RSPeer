@@ -42,7 +42,7 @@ public class Traverse extends Task {
         }
     }
 
-    public void checkRunEnergy() {
+    private void checkRunEnergy() {
         if (Movement.getRunEnergy() > toggleNextRun && !Movement.isRunEnabled()) {
             Movement.toggleRun(true);
             //Will toggle the run energy when it is between 20 and 30

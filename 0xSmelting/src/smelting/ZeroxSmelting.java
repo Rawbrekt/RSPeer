@@ -1,14 +1,14 @@
 package smelting;
 
+import org.rspeer.script.ScriptCategory;
+import org.rspeer.script.ScriptMeta;
+import org.rspeer.script.task.Task;
+import org.rspeer.script.task.TaskScript;
 import smelting.data.Item;
 import smelting.data.Location;
 import smelting.tasks.Banking;
 import smelting.tasks.Smelt;
 import smelting.tasks.Traverse;
-import org.rspeer.script.ScriptCategory;
-import org.rspeer.script.ScriptMeta;
-import org.rspeer.script.task.Task;
-import org.rspeer.script.task.TaskScript;
 
 @ScriptMeta(name = "0xSmelting", desc = "Tries to smelt.", category = ScriptCategory.SMITHING, developer = "0xRip", version = 0.1)
 
@@ -22,6 +22,5 @@ public class ZeroxSmelting extends TaskScript {
     @Override
     public void onStart() {
         submit(TASKS);
-
     }
 }
