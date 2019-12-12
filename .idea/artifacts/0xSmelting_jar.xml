@@ -1,8 +1,8 @@
 <component name="ArtifactManager">
-  <artifact type="jar" name="0xCrafting:jar">
+  <artifact type="jar" name="0xSmelting:jar">
     <output-path>$PROJECT_DIR$/../RSPeer/scripts</output-path>
     <root id="archive" name="0xCrafting.jar">
-      <element id="module-output" name="0xCrafting" />
+      <element id="module-output" name="0xSmelting" />
     </root>
   </artifact>
 </component>
