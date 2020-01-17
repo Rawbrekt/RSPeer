@@ -28,7 +28,7 @@ public class ZeroxSmelting extends TaskScript implements RenderListener, SkillLi
     public static Location location = Location.getLocation("EDGEVILLE");
 
     private long startTime;
-    public int amountSmelted = 0;
+    public long amountSmelted = 0;
 
 
     @Override
@@ -68,8 +68,7 @@ public class ZeroxSmelting extends TaskScript implements RenderListener, SkillLi
         g2d.setColor(Color.WHITE);
         g2d.drawString("Runtime: " + formatTime(runningTime), 20, 300);
         g2d.drawString("Smelted: " + amountSmelted, 20, 323);
-        g2d.drawString("Smelted: " + amountSmelted, 20, 323);
-        g2d.drawString("Per hour: " + ((amountSmelted / runningTime)*3600000), 165, 323);
+        g2d.drawString("Per hour: " + amountSmelted*3600000/(runningTime+1), 165, 323);
     }
 
     private String formatTime(long r){
@@ -80,7 +79,6 @@ public class ZeroxSmelting extends TaskScript implements RenderListener, SkillLi
         long seconds = TimeUnit.MILLISECONDS.toSeconds(r) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(r));
         String res = "";
 
-        //Pretty Print the time so it will always be in this format 00:00:00
         if( hours < 10 ){
             res = res + "0" + hours + ":";
         }

@@ -16,9 +16,9 @@ import org.rspeer.ui.Log;
 
 public class ZeroxCombat extends TaskScript {
 
-    public static int att = Skills.getLevel(Skill.ATTACK);
-    public static int str = Skills.getLevel(Skill.STRENGTH);
-    public static int def = Skills.getLevel(Skill.DEFENCE);
+    public static int att = Skills.getCurrentLevel(Skill.ATTACK);
+    public static int str = Skills.getCurrentLevel(Skill.STRENGTH);
+    public static int def = Skills.getCurrentLevel(Skill.DEFENCE);
 
     static int min = Math.min(att, Math.min(str,def));
     public static int goal = (Math.round(min/10)+1)*10;

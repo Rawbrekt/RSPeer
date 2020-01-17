@@ -20,7 +20,6 @@ public class UpdateTarget extends Task {
 
         int min = Math.min(att, Math.min(str,def));
         goal = (Math.round(min/10)+1)*10;
-
         return !(goal == ZeroxCombat.goal);
     }
 

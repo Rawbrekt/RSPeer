@@ -42,8 +42,8 @@ public enum Target {
                     new Position(3242, 3293, 0),
                     new Position(3240, 3297, 0)
             }
-    ), "Cow","Raw beef","Cooked meat", 20),
-    LUMBRIDGE_FROGS(Area.rectangular(3187, 3182, 3208, 3165), "Giant frog","","", 30);
+    ), "Cow","Raw beef","Cooked meat", 30),
+    LUMBRIDGE_FROGS(Area.rectangular(3187, 3182, 3208, 3165), "Giant frog","","", 50);
 
 
     private Area area;

@@ -3,7 +3,6 @@
     <output-path>$PROJECT_DIR$/../RSPeer/scripts</output-path>
     <root id="archive" name="0xSmelting.jar">
       <element id="module-output" name="0xSmelting" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/../RSPeer/cache/rspeer.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>

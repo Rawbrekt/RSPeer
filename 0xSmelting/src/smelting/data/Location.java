@@ -4,7 +4,8 @@ import org.rspeer.runetek.api.movement.position.Area;
 
 public enum Location {
 
-    EDGEVILLE(Area.rectangular(3098, 3499, 3091, 3488), Area.rectangular(3105, 3501, 3110, 3496));
+    EDGEVILLE(Area.rectangular(3098, 3499, 3091, 3488), Area.rectangular(3105, 3501, 3110, 3496)),
+    FALADOR(Area.rectangular(2949, 3366, 2945, 3369),Area.rectangular(2972, 3372, 2975, 3368));
 
     Area bankArea;
     Area furnaceArea;

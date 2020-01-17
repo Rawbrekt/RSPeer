@@ -1,12 +1,9 @@
 package fishing;
 
 import fishing.data.Fishtype;
-import fishing.tasks.Bank;
+import fishing.tasks.Banking;
 import fishing.tasks.Fish;
 import fishing.tasks.Traverse;
-import fishing.tasks.UpdateFishtype;
-import org.rspeer.runetek.api.component.tab.Skill;
-import org.rspeer.runetek.api.component.tab.Skills;
 import org.rspeer.script.ScriptCategory;
 import org.rspeer.script.ScriptMeta;
 import org.rspeer.script.task.Task;
@@ -16,10 +13,9 @@ import org.rspeer.script.task.TaskScript;
 
 public class ZeroxFishing extends TaskScript {
 
-    public static int FishingLevel = Skills.getLevel(Skill.FISHING);
-    public static Fishtype fishtype = Fishtype.getBestFishType(FishingLevel);
+    public static Fishtype fishtype = Fishtype.SHRIMPS;
 
-    private static final Task[] TASKS = {new UpdateFishtype(), new Bank(), new Traverse(), new Fish()};
+    private static final Task[] TASKS = {new Banking(), new Traverse(), new Fish()};
 
     @Override
     public void onStart() {
