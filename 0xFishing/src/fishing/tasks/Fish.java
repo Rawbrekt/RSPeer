@@ -17,9 +17,9 @@ public class Fish extends Task {
     @Override
     public boolean validate() {
 
-        if (ZeroxFishing.fishtype.getFISHING_AREA().contains(Players.getLocal()) && Inventory.contains(ZeroxFishing.fishtype.getItem()) && ZeroxFishing.fishtype.getBait() == 0) {
+        if (ZeroxFishing.fishtype.getFishingArea().contains(Players.getLocal()) && Inventory.contains(ZeroxFishing.fishtype.getItem()) && ZeroxFishing.fishtype.getBait() == 0) {
             return true;
-        } else if (ZeroxFishing.fishtype.getFISHING_AREA().contains(Players.getLocal()) && Inventory.contains(ZeroxFishing.fishtype.getItem()) && Inventory.contains(ZeroxFishing.fishtype.getBait()) && !(ZeroxFishing.fishtype.getBait() == 0)) {
+        } else if (ZeroxFishing.fishtype.getFishingArea().contains(Players.getLocal()) && Inventory.contains(ZeroxFishing.fishtype.getItem()) && Inventory.contains(ZeroxFishing.fishtype.getBait()) && !(ZeroxFishing.fishtype.getBait() == 0)) {
             return true;
         } else {
             return false;
@@ -32,7 +32,7 @@ public class Fish extends Task {
         Predicate<Npc> fishSpotPred =  f -> f.containsAction(ZeroxFishing.fishtype.getMethod());
         Npc fishSpot = Npcs.getNearest(fishSpotPred);
 
-        if (!(fishSpot == null) && !isAnimating() && ZeroxFishing.fishtype.getFISHING_AREA().contains(Players.getLocal())) {
+        if (!(fishSpot == null) && !isAnimating() && ZeroxFishing.fishtype.getFishingArea().contains(Players.getLocal())) {
             fishSpot.interact(ZeroxFishing.fishtype.getMethod());
         }
         return Random.nextInt(3000, 7050);

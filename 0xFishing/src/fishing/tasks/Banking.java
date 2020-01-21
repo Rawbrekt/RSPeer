@@ -9,7 +9,6 @@ import org.rspeer.runetek.api.component.tab.Inventory;
 import org.rspeer.runetek.api.scene.Players;
 import org.rspeer.runetek.api.scene.SceneObjects;
 import org.rspeer.script.task.Task;
-import org.rspeer.ui.Log;
 
 public class Banking extends Task {
 
@@ -54,9 +53,9 @@ public class Banking extends Task {
     private boolean shouldBank() {
 
         if (ZeroxFishing.fishtype.getBait() == 0) {
-            return (ZeroxFishing.fishtype.getBANKING_AREA().contains(Players.getLocal()) && (!Inventory.contains(ZeroxFishing.fishtype.getItem()) || Inventory.isFull()));
+            return (ZeroxFishing.fishtype.getBankingArea().contains(Players.getLocal()) && (!Inventory.contains(ZeroxFishing.fishtype.getItem()) || Inventory.isFull()));
         } else {
-            return (ZeroxFishing.fishtype.getBANKING_AREA().contains(Players.getLocal()) && (!Inventory.contains(ZeroxFishing.fishtype.getItem()) || !Inventory.contains(ZeroxFishing.fishtype.getBait()) || Inventory.isFull()));
+            return (ZeroxFishing.fishtype.getBankingArea().contains(Players.getLocal()) && (!Inventory.contains(ZeroxFishing.fishtype.getItem()) || !Inventory.contains(ZeroxFishing.fishtype.getBait()) || Inventory.isFull()));
         }
 
     }
