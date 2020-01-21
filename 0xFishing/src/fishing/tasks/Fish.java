@@ -8,13 +8,18 @@ import org.rspeer.runetek.api.scene.Npcs;
 import org.rspeer.runetek.api.scene.Players;
 import org.rspeer.script.task.Task;
 
+import java.util.function.Predicate;
+
 public class Fish extends Task {
 
     private long anim = 0;
 
     @Override
     public boolean validate() {
-        if (ZeroxFishing.fishtype.getFISHING_AREA().contains(Players.getLocal()) && Inventory.contains(ZeroxFishing.fishtype.getItem())) {
+
+        if (ZeroxFishing.fishtype.getFISHING_AREA().contains(Players.getLocal()) && Inventory.contains(ZeroxFishing.fishtype.getItem()) && ZeroxFishing.fishtype.getBait() == 0) {
+            return true;
+        } else if (ZeroxFishing.fishtype.getFISHING_AREA().contains(Players.getLocal()) && Inventory.contains(ZeroxFishing.fishtype.getItem()) && Inventory.contains(ZeroxFishing.fishtype.getBait()) && !(ZeroxFishing.fishtype.getBait() == 0)) {
             return true;
         } else {
             return false;
@@ -24,7 +29,9 @@ public class Fish extends Task {
 
     @Override
     public int execute() {
-        Npc fishSpot = Npcs.getNearest("Fishing Spot");
+        Predicate<Npc> fishSpotPred =  f -> f.containsAction(ZeroxFishing.fishtype.getMethod());
+        Npc fishSpot = Npcs.getNearest(fishSpotPred);
+
         if (!(fishSpot == null) && !isAnimating() && ZeroxFishing.fishtype.getFISHING_AREA().contains(Players.getLocal())) {
             fishSpot.interact(ZeroxFishing.fishtype.getMethod());
         }

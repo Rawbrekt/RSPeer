@@ -13,7 +13,7 @@ import org.rspeer.script.task.TaskScript;
 
 public class ZeroxFishing extends TaskScript {
 
-    public static Fishtype fishtype = Fishtype.SHRIMPS;
+    public static Fishtype fishtype = Fishtype.TROUT;
 
     private static final Task[] TASKS = {new Banking(), new Traverse(), new Fish()};
 

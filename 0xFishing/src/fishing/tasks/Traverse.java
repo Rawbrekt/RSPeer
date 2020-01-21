@@ -6,7 +6,6 @@ import org.rspeer.runetek.api.component.tab.Inventory;
 import org.rspeer.runetek.api.movement.Movement;
 import org.rspeer.runetek.api.scene.Players;
 import org.rspeer.script.task.Task;
-import org.rspeer.ui.Log;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -21,12 +20,6 @@ public class Traverse extends Task {
 
     @Override
     public int execute() {
-        if(traverseToBank()) {
-            Log.info("to bank");
-        }
-        if(traverseToFish()){
-            Log.info("to fish");
-        }
         checkRunEnergy();
 
         Movement.walkToRandomized(traverseToBank() ? ZeroxFishing.fishtype.getBANKING_AREA().getCenter() : ZeroxFishing.fishtype.getFISHING_AREA().getCenter());
@@ -41,11 +34,19 @@ public class Traverse extends Task {
     }
 
     private boolean traverseToBank() {
-        return !ZeroxFishing.fishtype.getBANKING_AREA().contains(Players.getLocal()) && (Inventory.isFull() || !Inventory.contains(ZeroxFishing.fishtype.getItem()));
+        if (ZeroxFishing.fishtype.getBait() == 0) {
+            return !ZeroxFishing.fishtype.getBANKING_AREA().contains(Players.getLocal()) && (Inventory.isFull() || !Inventory.contains(ZeroxFishing.fishtype.getItem()));
+        } else {
+            return !ZeroxFishing.fishtype.getBANKING_AREA().contains(Players.getLocal()) && (Inventory.isFull() || !Inventory.contains(ZeroxFishing.fishtype.getItem()) || !Inventory.contains(ZeroxFishing.fishtype.getBait()));
+        }
     }
 
     private boolean traverseToFish() {
-        return !ZeroxFishing.fishtype.getFISHING_AREA().contains(Players.getLocal()) && Inventory.contains(ZeroxFishing.fishtype.getItem());
+        if (ZeroxFishing.fishtype.getBait() == 0) {
+            return !ZeroxFishing.fishtype.getFISHING_AREA().contains(Players.getLocal()) && Inventory.contains(ZeroxFishing.fishtype.getItem());
+        } else {
+            return !ZeroxFishing.fishtype.getFISHING_AREA().contains(Players.getLocal()) && Inventory.contains(ZeroxFishing.fishtype.getItem()) && Inventory.contains(ZeroxFishing.fishtype.getBait());
+        }
     }
 
 }
