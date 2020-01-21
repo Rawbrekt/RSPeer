@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="jar" name="0xGE:jar">
-    <output-path>$PROJECT_DIR$/../RSPeer/scripts</output-path>
+    <output-path>$USER_HOME$/Documents/RSPeer/scripts</output-path>
     <root id="archive" name="0xGE.jar">
       <element id="module-output" name="0xGE" />
     </root>
