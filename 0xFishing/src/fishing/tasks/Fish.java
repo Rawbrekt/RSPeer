@@ -10,6 +10,8 @@ import org.rspeer.script.task.Task;
 
 import java.util.function.Predicate;
 
+import static fishing.ZeroxFishing.fishtype;
+
 public class Fish extends Task {
 
     private long anim = 0;
@@ -17,9 +19,9 @@ public class Fish extends Task {
     @Override
     public boolean validate() {
 
-        if (ZeroxFishing.fishtype.getFishingArea().contains(Players.getLocal()) && Inventory.contains(ZeroxFishing.fishtype.getItem()) && ZeroxFishing.fishtype.getBait() == 0) {
+        if (fishtype.getFishingArea().contains(Players.getLocal()) && Inventory.contains(fishtype.getItem()) && fishtype.getBait() == 0) {
             return true;
-        } else if (ZeroxFishing.fishtype.getFishingArea().contains(Players.getLocal()) && Inventory.contains(ZeroxFishing.fishtype.getItem()) && Inventory.contains(ZeroxFishing.fishtype.getBait()) && !(ZeroxFishing.fishtype.getBait() == 0)) {
+        } else if (fishtype.getFishingArea().contains(Players.getLocal()) && Inventory.contains(fishtype.getItem()) && Inventory.contains(fishtype.getBait()) && !(fishtype.getBait() == 0)) {
             return true;
         } else {
             return false;
@@ -29,11 +31,11 @@ public class Fish extends Task {
 
     @Override
     public int execute() {
-        Predicate<Npc> fishSpotPred =  f -> f.containsAction(ZeroxFishing.fishtype.getMethod());
+        Predicate<Npc> fishSpotPred =  f -> f.containsAction(fishtype.getMethod());
         Npc fishSpot = Npcs.getNearest(fishSpotPred);
 
-        if (!(fishSpot == null) && !isAnimating() && ZeroxFishing.fishtype.getFishingArea().contains(Players.getLocal())) {
-            fishSpot.interact(ZeroxFishing.fishtype.getMethod());
+        if (!(fishSpot == null) && !isAnimating() && fishtype.getFishingArea().contains(Players.getLocal())) {
+            fishSpot.interact(fishtype.getMethod());
         }
         return Random.nextInt(3000, 7050);
     }

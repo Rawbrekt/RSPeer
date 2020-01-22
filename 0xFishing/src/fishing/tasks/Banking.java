@@ -1,6 +1,5 @@
 package fishing.tasks;
 
-import fishing.ZeroxFishing;
 import org.rspeer.runetek.adapter.scene.SceneObject;
 import org.rspeer.runetek.api.commons.Time;
 import org.rspeer.runetek.api.commons.math.Random;
@@ -9,6 +8,8 @@ import org.rspeer.runetek.api.component.tab.Inventory;
 import org.rspeer.runetek.api.scene.Players;
 import org.rspeer.runetek.api.scene.SceneObjects;
 import org.rspeer.script.task.Task;
+
+import static fishing.ZeroxFishing.fishtype;
 
 public class Banking extends Task {
 
@@ -20,24 +21,24 @@ public class Banking extends Task {
     @Override
     public int execute() {
         if (Bank.isOpen()) {
-            if (ZeroxFishing.fishtype.getBait() == 0) {
-                if (!Inventory.contains(ZeroxFishing.fishtype.getItem())) {
-                    Bank.withdraw(ZeroxFishing.fishtype.getItem(), 1);
-                    Time.sleepUntil(() -> Inventory.contains(ZeroxFishing.fishtype.getItem()), Random.nextInt(150, 2000));
+            if (fishtype.getBait() == 0) {
+                if (!Inventory.contains(fishtype.getItem())) {
+                    Bank.withdraw(fishtype.getItem(), 1);
+                    Time.sleepUntil(() -> Inventory.contains(fishtype.getItem()), Random.nextInt(150, 2000));
                 }
-                Bank.depositAllExcept(ZeroxFishing.fishtype.getItem());
+                Bank.depositAllExcept(fishtype.getItem());
             } else {
 
-                if (!Inventory.contains(ZeroxFishing.fishtype.getItem())) {
-                    Bank.withdraw(ZeroxFishing.fishtype.getItem(), 1);
-                    Time.sleepUntil(() -> Inventory.contains(ZeroxFishing.fishtype.getItem()), Random.nextInt(150, 2000));
+                if (!Inventory.contains(fishtype.getItem())) {
+                    Bank.withdraw(fishtype.getItem(), 1);
+                    Time.sleepUntil(() -> Inventory.contains(fishtype.getItem()), Random.nextInt(150, 2000));
                 }
 
-                if (!Inventory.contains(ZeroxFishing.fishtype.getBait())) {
-                    Bank.withdrawAll(ZeroxFishing.fishtype.getBait());
-                    Time.sleepUntil(() -> Inventory.contains(ZeroxFishing.fishtype.getItem()), Random.nextInt(150, 2000));
+                if (!Inventory.contains(fishtype.getBait())) {
+                    Bank.withdrawAll(fishtype.getBait());
+                    Time.sleepUntil(() -> Inventory.contains(fishtype.getItem()), Random.nextInt(150, 2000));
                 }
-                Bank.depositAllExcept(ZeroxFishing.fishtype.getItem(), ZeroxFishing.fishtype.getBait());
+                Bank.depositAllExcept(fishtype.getItem(), fishtype.getBait());
 
             }
         } else {
@@ -52,10 +53,10 @@ public class Banking extends Task {
 
     private boolean shouldBank() {
 
-        if (ZeroxFishing.fishtype.getBait() == 0) {
-            return (ZeroxFishing.fishtype.getBankingArea().contains(Players.getLocal()) && (!Inventory.contains(ZeroxFishing.fishtype.getItem()) || Inventory.isFull()));
+        if (fishtype.getBait() == 0) {
+            return (fishtype.getBankingArea().contains(Players.getLocal()) && (!Inventory.contains(fishtype.getItem()) || Inventory.isFull()));
         } else {
-            return (ZeroxFishing.fishtype.getBankingArea().contains(Players.getLocal()) && (!Inventory.contains(ZeroxFishing.fishtype.getItem()) || !Inventory.contains(ZeroxFishing.fishtype.getBait()) || Inventory.isFull()));
+            return (fishtype.getBankingArea().contains(Players.getLocal()) && (!Inventory.contains(fishtype.getItem()) || !Inventory.contains(fishtype.getBait()) || Inventory.isFull()));
         }
 
     }

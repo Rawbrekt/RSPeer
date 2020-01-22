@@ -1,7 +1,5 @@
 package fishing.tasks;
 
-import fishing.ZeroxFishing;
-import org.rspeer.runetek.adapter.Positionable;
 import org.rspeer.runetek.api.commons.math.Random;
 import org.rspeer.runetek.api.component.tab.Inventory;
 import org.rspeer.runetek.api.movement.Movement;
@@ -9,6 +7,8 @@ import org.rspeer.runetek.api.scene.Players;
 import org.rspeer.script.task.Task;
 
 import java.util.concurrent.ThreadLocalRandom;
+
+import static fishing.ZeroxFishing.fishtype;
 
 public class Traverse extends Task {
 
@@ -23,7 +23,7 @@ public class Traverse extends Task {
     public int execute() {
         checkRunEnergy();
 
-        Movement.walkToRandomized(traverseToBank() ? ZeroxFishing.fishtype.getBankingArea().getCenter() : ZeroxFishing.fishtype.getFishingArea().getCenter());
+        Movement.walkToRandomized(traverseToBank() ? fishtype.getBankingArea().getCenter() : fishtype.getFishingArea().getCenter());
         return Random.nextInt(1500, 6000);
     }
 
@@ -35,18 +35,18 @@ public class Traverse extends Task {
     }
 
     private boolean traverseToBank() {
-        if (ZeroxFishing.fishtype.getBait() == 0) {
-            return !ZeroxFishing.fishtype.getBankingArea().contains(Players.getLocal()) && (Inventory.isFull() || !Inventory.contains(ZeroxFishing.fishtype.getItem()));
+        if (fishtype.getBait() == 0) {
+            return !fishtype.getBankingArea().contains(Players.getLocal()) && (Inventory.isFull() || !Inventory.contains(fishtype.getItem()));
         } else {
-            return !ZeroxFishing.fishtype.getBankingArea().contains(Players.getLocal()) && (Inventory.isFull() || !Inventory.contains(ZeroxFishing.fishtype.getItem()) || !Inventory.contains(ZeroxFishing.fishtype.getBait()));
+            return !fishtype.getBankingArea().contains(Players.getLocal()) && (Inventory.isFull() || !Inventory.contains(fishtype.getItem()) || !Inventory.contains(fishtype.getBait()));
         }
     }
 
     private boolean traverseToFish() {
-        if (ZeroxFishing.fishtype.getBait() == 0) {
-            return !ZeroxFishing.fishtype.getFishingArea().contains(Players.getLocal()) && Inventory.contains(ZeroxFishing.fishtype.getItem());
+        if (fishtype.getBait() == 0) {
+            return !fishtype.getFishingArea().contains(Players.getLocal()) && Inventory.contains(fishtype.getItem());
         } else {
-            return !ZeroxFishing.fishtype.getFishingArea().contains(Players.getLocal()) && Inventory.contains(ZeroxFishing.fishtype.getItem()) && Inventory.contains(ZeroxFishing.fishtype.getBait());
+            return !fishtype.getFishingArea().contains(Players.getLocal()) && Inventory.contains(fishtype.getItem()) && Inventory.contains(fishtype.getBait());
         }
     }
 

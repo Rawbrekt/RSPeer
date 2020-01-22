@@ -3,6 +3,7 @@ package fishing;
 import fishing.data.Fishtype;
 import fishing.tasks.Banking;
 import fishing.tasks.Fish;
+import fishing.tasks.Mule;
 import fishing.tasks.Traverse;
 import org.rspeer.script.ScriptCategory;
 import org.rspeer.script.ScriptMeta;
@@ -13,9 +14,13 @@ import org.rspeer.script.task.TaskScript;
 
 public class ZeroxFishing extends TaskScript {
 
+    public static boolean muled = false;
+    public static String MULE_NAME = "";
+    public static String MULE_WORLD = "World 301";
+
     public static Fishtype fishtype = Fishtype.TROUT;
 
-    private static final Task[] TASKS = {new Banking(), new Traverse(), new Fish()};
+    private static final Task[] TASKS = {new Banking(), new Traverse(), new Fish(), new Mule()};
 
     @Override
     public void onStart() {
