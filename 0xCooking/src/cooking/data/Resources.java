@@ -20,23 +20,12 @@ public enum Resources {
         return BANKING_AREA;
     }
 
-    public void setBANKING_AREA(Area BANKING_AREA) {
-        this.BANKING_AREA = BANKING_AREA;
-    }
-
     public Area getCOOKING_AREA() {
         return COOKING_AREA;
-    }
-
-    public void setCOOKING_AREA(Area COOKING_AREA) {
-        this.COOKING_AREA = COOKING_AREA;
     }
 
     public int getItem() {
         return item;
     }
 
-    public void setItem(int item) {
-        this.item = item;
-    }
 }

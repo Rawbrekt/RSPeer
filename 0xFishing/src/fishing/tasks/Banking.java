@@ -8,6 +8,9 @@ import org.rspeer.runetek.api.component.tab.Inventory;
 import org.rspeer.runetek.api.scene.Players;
 import org.rspeer.runetek.api.scene.SceneObjects;
 import org.rspeer.script.task.Task;
+import org.rspeer.ui.Log;
+
+import java.util.function.Predicate;
 
 import static fishing.ZeroxFishing.fishtype;
 
@@ -36,13 +39,14 @@ public class Banking extends Task {
 
                 if (!Inventory.contains(fishtype.getBait())) {
                     Bank.withdrawAll(fishtype.getBait());
-                    Time.sleepUntil(() -> Inventory.contains(fishtype.getItem()), Random.nextInt(150, 2000));
+                    Time.sleepUntil(() -> Inventory.contains(fishtype.getBait()), Random.nextInt(150, 2000));
                 }
                 Bank.depositAllExcept(fishtype.getItem(), fishtype.getBait());
 
             }
         } else {
-            SceneObject BANK = SceneObjects.getNearest(10355);
+            Predicate<SceneObject> bankPred = b -> b.containsAction("Bank") || b.containsAction("Deposit");
+            SceneObject BANK = SceneObjects.getNearest(bankPred);
             if (!BANK.equals(null)) {
                 BANK.interact("Bank");
                 Time.sleepUntil(() -> Bank.isOpen(), Random.nextInt(3000, 6000));
@@ -54,9 +58,9 @@ public class Banking extends Task {
     private boolean shouldBank() {
 
         if (fishtype.getBait() == 0) {
-            return (fishtype.getBankingArea().contains(Players.getLocal()) && (!Inventory.contains(fishtype.getItem()) || Inventory.isFull()));
+            return ((fishtype.getBankingArea().contains(Players.getLocal()) || fishtype.getAltBankingArea().contains(Players.getLocal())) && (!Inventory.contains(fishtype.getItem()) || Inventory.isFull()));
         } else {
-            return (fishtype.getBankingArea().contains(Players.getLocal()) && (!Inventory.contains(fishtype.getItem()) || !Inventory.contains(fishtype.getBait()) || Inventory.isFull()));
+            return ((fishtype.getBankingArea().contains(Players.getLocal()) || fishtype.getAltBankingArea().contains(Players.getLocal())) && (!Inventory.contains(fishtype.getItem()) || !Inventory.contains(fishtype.getBait()) || Inventory.isFull()));
         }
 
     }

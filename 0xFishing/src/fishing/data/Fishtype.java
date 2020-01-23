@@ -4,61 +4,67 @@ import org.rspeer.runetek.api.movement.position.Area;
 import org.rspeer.ui.Log;
 
 public enum Fishtype {
-        SHRIMPS(Area.rectangular(3269, 3173, 3272, 3161),Area.rectangular(3265, 3150, 3278, 3138),303,0,"Small Net",20),
-        TROUT(Area.rectangular(3091, 3499, 3098, 3488),Area.rectangular(3100, 3435, 3114, 3422),309,314,"Lure",40),
-        LOBSTERS(Area.rectangular(3269, 3173, 3272, 3161),Area.rectangular(3265, 3150, 3278, 3138),303,0,"Small Net",99);
+    SHRIMPS(Area.rectangular(3269, 3173, 3272, 3161), null, Area.rectangular(3265, 3150, 3278, 3138), 303, 0, "Small Net", 20),
+    TROUT(Area.rectangular(3091, 3499, 3098, 3488), null, Area.rectangular(3100, 3435, 3114, 3422), 309, 314, "Lure", 40),
+    LOBSTERS(Area.rectangular(3038, 3238, 3052, 3232), Area.rectangular(3094, 3246, 3092, 3240), Area.rectangular(2927, 3181, 2917, 3174), 301, 995, "Cage", 99);
 
-        private Area bankingArea;
-        private Area fishingArea;
-        private int item;
-        private int bait;
-        private String method;
-        private int goal;
+    private Area bankingArea;
+    private Area altBankingArea;
+    private Area fishingArea;
+    private int item;
+    private int bait;
+    private String method;
+    private int goal;
 
-        Fishtype(Area bankingArea, Area fishingArea, int item, int bait,String method, int goal) {
-                this.bankingArea = bankingArea;
-                this.fishingArea = fishingArea;
-                this.item = item;
-                this.bait = bait;
-                this.method = method;
-                this.goal = goal;
-        }
+    Fishtype(Area bankingArea, Area altBankingArea, Area fishingArea, int item, int bait, String method, int goal) {
+        this.bankingArea = bankingArea;
+        this.altBankingArea = altBankingArea;
+        this.fishingArea = fishingArea;
+        this.item = item;
+        this.bait = bait;
+        this.method = method;
+        this.goal = goal;
+    }
 
-        public static Fishtype getBestFishType(int i) {
-                Fishtype temp = null;
+    public static Fishtype getBestFishType(int i) {
+        Fishtype temp = null;
 
-                for (Fishtype t: Fishtype.values()) {
-                        if (t.getGoal() < i) {
-                                temp = t;
-                        } else {
-                                Log.info(temp);
-                                return temp;
-                        }
-                }
+        for (Fishtype t : Fishtype.values()) {
+            if (t.getGoal() < i) {
+                temp = t;
+            } else {
+                Log.info(temp);
                 return temp;
+            }
         }
+        return temp;
+    }
 
-        public int getGoal() {
-                return goal;
-        }
+    public int getGoal() {
+        return goal;
+    }
 
-        public String getMethod() {
-                return method;
-        }
+    public String getMethod() {
+        return method;
+    }
 
-        public int getItem() {
-                return item;
-        }
+    public int getItem() {
+        return item;
+    }
 
-        public Area getFishingArea() {
-                return fishingArea;
-        }
+    public Area getFishingArea() {
+        return fishingArea;
+    }
 
-        public Area getBankingArea() {
-                return bankingArea;
-        }
+    public Area getBankingArea() {
+        return bankingArea;
+    }
 
-        public int getBait() {
-                return bait;
-        }
+    public int getBait() {
+        return bait;
+    }
+
+    public Area getAltBankingArea() {
+        return altBankingArea;
+    }
 }

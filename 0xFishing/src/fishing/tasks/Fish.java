@@ -1,6 +1,5 @@
 package fishing.tasks;
 
-import fishing.ZeroxFishing;
 import org.rspeer.runetek.adapter.scene.Npc;
 import org.rspeer.runetek.api.commons.math.Random;
 import org.rspeer.runetek.api.component.tab.Inventory;
