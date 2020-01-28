@@ -1,15 +1,18 @@
 package fishing.tasks;
 
+import fishing.data.Fishtype;
 import org.rspeer.runetek.adapter.scene.Npc;
 import org.rspeer.runetek.api.commons.math.Random;
 import org.rspeer.runetek.api.component.tab.Inventory;
+import org.rspeer.runetek.api.component.tab.Skill;
+import org.rspeer.runetek.api.component.tab.Skills;
 import org.rspeer.runetek.api.scene.Npcs;
 import org.rspeer.runetek.api.scene.Players;
 import org.rspeer.script.task.Task;
 
+import static fishing.ZeroxFishing.fishtype;
 import java.util.function.Predicate;
 
-import static fishing.ZeroxFishing.fishtype;
 
 public class Fish extends Task {
 
@@ -30,12 +33,22 @@ public class Fish extends Task {
 
     @Override
     public int execute() {
-        Predicate<Npc> fishSpotPred =  f -> f.containsAction(fishtype.getMethod());
-        Npc fishSpot = Npcs.getNearest(fishSpotPred);
 
-        if (!(fishSpot == null) && !isAnimating() && fishtype.getFishingArea().contains(Players.getLocal())) {
-            fishSpot.interact(fishtype.getMethod());
+        int fishingLvl = Skills.getCurrentLevel(Skill.FISHING);
+        Fishtype newFish = Fishtype.getBestFishType(fishingLvl);
+
+        if (fishtype == newFish) {
+
+            Predicate<Npc> fishSpotPred =  f -> f.containsAction(fishtype.getMethod());
+            Npc fishSpot = Npcs.getNearest(fishSpotPred);
+
+            if (!(fishSpot == null) && !isAnimating() && fishtype.getFishingArea().contains(Players.getLocal())) {
+                fishSpot.interact(fishtype.getMethod());
+            }
+        } else {
+            fishtype = newFish;
         }
+
         return Random.nextInt(3000, 7050);
     }
 
