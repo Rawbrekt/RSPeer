@@ -1,7 +1,6 @@
 package fishing.tasks;
 
 import fishing.data.Fishtype;
-import org.rspeer.runetek.adapter.component.Item;
 import org.rspeer.runetek.adapter.scene.SceneObject;
 import org.rspeer.runetek.api.commons.Time;
 import org.rspeer.runetek.api.commons.math.Random;
@@ -13,19 +12,15 @@ import org.rspeer.runetek.api.scene.SceneObjects;
 import org.rspeer.script.task.Task;
 import org.rspeer.ui.Log;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Set;
 import java.util.function.Predicate;
-
 import static fishing.ZeroxFishing.fishtype;
+import static fishing.ZeroxFishing.tutProgress;
 
 public class Banking extends Task {
 
     @Override
     public boolean validate() {
-        return shouldBank();
+        return shouldBank() && tutProgress == 1000;
     }
 
     @Override
@@ -56,34 +51,36 @@ public class Banking extends Task {
                     }
                 }
             } else {
-                if (fishtype.getBait() == 0 && Inventory.getFreeSlots() == 27) {
+                if (fishtype.getBait() == 0) {
                     DepositBox.depositAllExcept(fishtype.getItem());
                     Time.sleepUntil(() -> Inventory.getFreeSlots() == 27, Random.nextInt(150, 1000));
                 } else {
 
-                    Item[] items = DepositBox.getItems();
+                    DepositBox.depositAllExcept(fishtype.getItem(), fishtype.getBait());
+                    Time.sleepUntil(() -> Inventory.getFreeSlots() == 26, Random.nextInt(1000,2000));
+                    /*Item[] items = DepositBox.getItems();
 
-                    Set<Item> set = new LinkedHashSet<Item>(Arrays.asList(items));
-                    set.toArray();
+                    Set<Integer> UniqueIDs = new LinkedHashSet<Integer>();
 
-
-
-                    Item[] Uniques = Arrays.stream(DepositBox.getItems()).distinct().toArray(Item[]::new);
-                    Log.severe("uniques: " + Uniques.length);
-
-                    for (Item item : Uniques) {
+                    for (Item item : items) {
                         if (!(item.getId() == fishtype.getItem()) && !(item.getId() == fishtype.getBait()) && !(item == null)) {
-                            Log.info("Depositing: " + item);
-                            //item.interact("Deposit-All");
-                            Time.sleep(Random.nextInt(250, 500));
+                            UniqueIDs.add(item.getId());
                         }
                     }
+
+
+                    for (Integer i : UniqueIDs) {
+                        Log.info("Depositing: " + i);
+                        DepositBox.depositAll(i);
+                        Time.sleep(Random.nextInt(1000, 1500));
+                    }*/
                 }
             }
 
+
         } else {
 
-            if (fishtype.getBankingArea().contains(Players.getLocal()) && !fishtype.equals(Fishtype.LOBSTERS)) {
+            if (!fishtype.equals(Fishtype.LOBSTERS) || fishtype.getAltBankingArea().contains(Players.getLocal())) {
                 Predicate<SceneObject> bankPred = b -> b.containsAction("Bank");
                 SceneObject BANK = SceneObjects.getNearest(bankPred);
 
@@ -97,7 +94,7 @@ public class Banking extends Task {
 
                 if (!BANK.equals(null)) {
                     BANK.interact("Deposit");
-                    Time.sleepUntil(() -> Bank.isOpen(), Random.nextInt(3000, 6000));
+                    Time.sleepUntil(() -> DepositBox.isOpen(), Random.nextInt(3000, 6000));
                 }
             }
 

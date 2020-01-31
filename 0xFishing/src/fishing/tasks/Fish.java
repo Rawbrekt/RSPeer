@@ -11,6 +11,8 @@ import org.rspeer.runetek.api.scene.Players;
 import org.rspeer.script.task.Task;
 
 import static fishing.ZeroxFishing.fishtype;
+import static fishing.ZeroxFishing.tutProgress;
+
 import java.util.function.Predicate;
 
 
@@ -21,9 +23,9 @@ public class Fish extends Task {
     @Override
     public boolean validate() {
 
-        if (fishtype.getFishingArea().contains(Players.getLocal()) && Inventory.contains(fishtype.getItem()) && fishtype.getBait() == 0) {
+        if (fishtype.getFishingArea().contains(Players.getLocal()) && Inventory.contains(fishtype.getItem()) && fishtype.getBait() == 0 && tutProgress == 1000) {
             return true;
-        } else if (fishtype.getFishingArea().contains(Players.getLocal()) && Inventory.contains(fishtype.getItem()) && Inventory.contains(fishtype.getBait()) && !(fishtype.getBait() == 0)) {
+        } else if (fishtype.getFishingArea().contains(Players.getLocal()) && Inventory.contains(fishtype.getItem()) && Inventory.contains(fishtype.getBait()) && !(fishtype.getBait() == 0) && tutProgress == 1000) {
             return true;
         } else {
             return false;

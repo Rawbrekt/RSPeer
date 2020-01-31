@@ -16,13 +16,11 @@ import org.rspeer.runetek.api.scene.Npcs;
 import org.rspeer.runetek.api.scene.Players;
 import org.rspeer.runetek.api.scene.SceneObjects;
 import org.rspeer.script.task.Task;
-import org.rspeer.ui.Log;
-
 
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
-
 import static fishing.ZeroxFishing.fishtype;
+import static fishing.ZeroxFishing.tutProgress;
 
 public class Traverse extends Task {
 
@@ -37,12 +35,11 @@ public class Traverse extends Task {
 
     @Override
     public boolean validate() {
-        return traverseToBank() || traverseToFish();
+        return (traverseToBank() || traverseToFish()) && tutProgress == 1000;
     }
 
     @Override
     public int execute() {
-
         if (fishtype.isPowerfish() && fishtype.getFishingArea().contains(Players.getLocal())) {
             Item[] Items = Inventory.getItems();
             for (Item item : Items) {

@@ -1,11 +1,12 @@
 package fishing;
 
 import fishing.data.Fishtype;
-import fishing.tasks.Banking;
-import fishing.tasks.Fish;
-import fishing.tasks.Traverse;
+import fishing.tasks.*;
+import org.rspeer.runetek.api.Varps;
 import org.rspeer.runetek.api.component.tab.Skill;
 import org.rspeer.runetek.api.component.tab.Skills;
+import org.rspeer.runetek.event.listeners.ChatMessageListener;
+import org.rspeer.runetek.event.types.ChatMessageEvent;
 import org.rspeer.script.ScriptCategory;
 import org.rspeer.script.ScriptMeta;
 import org.rspeer.script.task.Task;
@@ -14,16 +15,21 @@ import org.rspeer.ui.Log;
 
 @ScriptMeta(name = "0xFishing", desc = "Tries to fish.", category = ScriptCategory.FISHING, developer = "0xRip", version = 0.1)
 
-public class ZeroxFishing extends TaskScript {
+public class ZeroxFishing extends TaskScript implements ChatMessageListener {
 
     public static boolean muled = false;
-    public static String MULE_NAME = "";
-    public static String MULE_WORLD = "World 301";
+    public static boolean banked = false;
+    public static String MULE_NAME = "Maxi Riprekt";
+    public static String MULE_WORLD = "World 308";
+    public static int MULE_WORLD_INT = 308;
+    public static final int V_TUTISLAND = 281;
+    public static int tutProgress;
+
 
 
     public static Fishtype fishtype = Fishtype.SHRIMPS;
 
-    private static final Task[] TASKS = {new Banking(), new Traverse(), new Fish()};
+    private static final Task[] TASKS = {new TutIsland(), new Mule(), new Banking(), new Traverse(), new Fish()};
 
     @Override
     public void onStart() {
@@ -32,6 +38,8 @@ public class ZeroxFishing extends TaskScript {
         fishtype = Fishtype.getBestFishType(fishlvl);
 
         Log.fine(fishtype);
+
+        tutProgress = Varps.get(V_TUTISLAND);
 
         /*if (fishlvl < 20) {
             fishtype = Fishtype.SHRIMPS;
@@ -43,6 +51,18 @@ public class ZeroxFishing extends TaskScript {
 
         submit(TASKS);
 
+    }
 
+    @Override
+    public void notify(ChatMessageEvent msg) {
+        if(msg.getMessage().equals("Accepted trade")) {
+            muled = true;
+            Log.info("trade done");
+        }
+
+        if (msg.getMessage().contains("has logged o")) {
+            muled = false;
+            Log.info("mule logged out");
+        }
     }
 }
