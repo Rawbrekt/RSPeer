@@ -1,6 +1,7 @@
 package GE;
 
 import GE.data.PriceCheck;
+import com.google.gson.JsonObject;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
@@ -8,6 +9,7 @@ import org.json.JSONObject;
 import org.rspeer.runetek.api.component.tab.Skill;
 import org.rspeer.runetek.api.component.tab.Skills;
 import org.rspeer.runetek.api.scene.Players;
+import org.rspeer.runetek.event.types.LoginResponseEvent;
 import org.rspeer.script.Script;
 import org.rspeer.script.ScriptCategory;
 import org.rspeer.script.ScriptMeta;
@@ -110,4 +112,13 @@ public class Main extends Script {
         socket.close();
 
     }
+
+    /*@Override
+    public void notify(LoginResponseEvent loginResponseEvent) {
+        LoginResponseEvent.Response response = loginResponseEvent.getResponse();
+        if (response == LoginResponseEvent.Response.ACCOUNT_DISABLED) {
+            JsonObject obj = new JsonObject();
+            obj.put("status",response);
+        }
+    }*/
 }

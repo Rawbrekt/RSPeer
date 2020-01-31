@@ -14,6 +14,7 @@ import org.rspeer.runetek.api.component.InterfaceOptions;
 import org.rspeer.runetek.api.component.Interfaces;
 import org.rspeer.runetek.api.component.ItemTables;
 import org.rspeer.runetek.api.component.chatter.BefriendedPlayers;
+import org.rspeer.runetek.api.component.chatter.Chat;
 import org.rspeer.runetek.api.component.tab.Combat;
 import org.rspeer.runetek.api.component.tab.Inventory;
 import org.rspeer.runetek.api.component.tab.Tab;
@@ -27,7 +28,10 @@ import org.rspeer.runetek.api.scene.Players;
 import org.rspeer.runetek.api.scene.SceneObjects;
 import org.rspeer.script.task.Task;
 import org.rspeer.ui.Log;
+
+import java.security.Key;
 import java.util.function.Predicate;
+
 import static fishing.ZeroxFishing.MULE_NAME;
 import static fishing.ZeroxFishing.V_TUTISLAND;
 import static fishing.ZeroxFishing.tutProgress;
@@ -55,7 +59,7 @@ public class TutIsland extends Task {
 
         Log.info("" + tutProgress);
 
-        switch(tutProgress) {
+        switch (tutProgress) {
             case 1:
                 // Account name and looks
                 createCharacter();
@@ -149,12 +153,19 @@ public class TutIsland extends Task {
                 useItemOn("Raw shrimps", SceneObjects.getNearest("Fire"));
                 break;
             case 120:
+            case 360:
                 SceneObjects.getNearest("Gate").interact("Open");
                 break;
             case 130:
                 SceneObjects.getNearest("Door").interact("Open");
                 break;
             case 140:
+            case 330:
+            case 270:
+            case 240:
+            case 220:
+            case 370:
+            case 410:
                 doDefault = true;
                 break;
             case 150:
@@ -184,9 +195,6 @@ public class TutIsland extends Task {
                     SceneObjects.getNearest("Door").interact("Open");
                 }
                 break;
-            case 220:
-                doDefault = true;
-                break;
             case 230:
                 if (Dialog.canContinue()) {
                     Dialog.processContinue();
@@ -196,9 +204,6 @@ public class TutIsland extends Task {
                         Time.sleepUntil(() -> Tabs.isOpen(Tab.QUEST_LIST), Random.nextInt(2000, 2500));
                     }
                 }
-                break;
-            case 240:
-                doDefault = true;
                 break;
             case 250:
                 if (Dialog.canContinue()) {
@@ -218,9 +223,6 @@ public class TutIsland extends Task {
                     doDefault = true;
                 }
                 break;
-            case 270:
-                doDefault = true;
-                break;
             case 300:
                 SceneObjects.getNearest(10080).interact("Mine");
                 break;
@@ -229,9 +231,6 @@ public class TutIsland extends Task {
                 break;
             case 320:
                 SceneObjects.getNearest("Furnace").interact("Use");
-                break;
-            case 330:
-                doDefault = true;
                 break;
             case 340:
                 if (Dialog.isOpen() && Dialog.canContinue()) {
@@ -250,12 +249,6 @@ public class TutIsland extends Task {
                         Time.sleepUntil(() -> Interfaces.isOpen(312), Random.nextInt(2000, 2500));
                     }
                 }
-                break;
-            case 360:
-                SceneObjects.getNearest("Gate").interact("Open");
-                break;
-            case 370:
-                doDefault = true;
                 break;
             case 390:
                 if (Dialog.canContinue()) {
@@ -279,9 +272,6 @@ public class TutIsland extends Task {
             case 405:
                 Interfaces.getComponent(85, 0, 8).interact("Equip");
                 break;
-            case 410:
-                doDefault = true;
-                break;
             case 420:
                 if (Dialog.canContinue()) {
                     Dialog.processContinue();
@@ -301,7 +291,8 @@ public class TutIsland extends Task {
             case 440:
                 SceneObjects.getNearest(so -> so.getName().equalsIgnoreCase("Gate") && so.getY() > 9515).interact("Open");
                 break;
-            case 450: case 460:
+            case 450:
+            case 460:
                 if (Players.getLocal().getTargetIndex() == -1) {
                     Npcs.getNearest(n -> n.getName().equals("Giant rat") && n.getTargetIndex() == -1).interact(a -> true);
                 }
@@ -374,7 +365,7 @@ public class TutIsland extends Task {
             case 550:
                 if (Players.getLocal().getY() > 3116) {
                     Movement.walkTo(new Position(3134, 3116));
-                } else if(Movement.isInteractable(new Position(3127, 3106))) {
+                } else if (Movement.isInteractable(new Position(3127, 3106))) {
                     doDefault = true;
                 } else {
                     SceneObjects.getNearest(so -> so.distance(new Position(3127, 3106)) < 5 && so.containsAction("Open")).interact("Open");
@@ -458,18 +449,17 @@ public class TutIsland extends Task {
                 }
                 break;
             case 1000:
+
                 if (InterfaceOptions.getViewMode() != InterfaceOptions.ViewMode.FIXED_MODE) {
                     Interfaces.getComponent(261, 33).interact("Fixed Mode");
                 }
 
+                // Do final tasks
+                if (BefriendedPlayers.getCount() == 0) {
+                    // Add mule as friend for muling control
+                    addFriend(MULE_NAME);
+                    Time.sleepUntil(() -> BefriendedPlayers.getCount() == 1, Random.nextInt(4000, 4500));
 
-                if (Players.getLocal().getY() > 3200) {
-                    // Do final tasks
-                    if (BefriendedPlayers.getCount() == 0) {
-                        // Add mule as friend for muling control
-                        addFriend(MULE_NAME);
-                        Time.sleepUntil(() -> BefriendedPlayers.getCount() == 1, Random.nextInt(4000, 4500));
-                    }
                 }
                 break;
         }
@@ -499,24 +489,30 @@ public class TutIsland extends Task {
             }
         }
 
-        return 1000;
+        return Random.nextInt(500, 1750);
     }
 
     private void createCharacter() {
         int genderProbability;
 
         if (Interfaces.isOpen(558)) {
-            InterfaceComponent fieldname = Interfaces.getComponent(558,7);
-            fieldname.interact("Look up name");
-            Keyboard.sendText("riverside997");
-            Time.sleepUntil(() -> Interfaces.getComponent(162, 45).getText().contains("riverside"), Random.nextInt(2000, 2500));
-            Keyboard.pressEnter();
-            Time.sleep(10000);
-
-            if (Interfaces.getComponent(558, 12).getText().contains("not available")) {
-                Interfaces.getComponent(558, 15).interact("Set name");
+            if (Interfaces.getComponent(558, 18, 9).getTextColor() != 16750623) {
+                if (Interfaces.getComponent(558, 11).getText() == "") {
+                    if (Interfaces.getComponent(263, 1, 0).isVisible()) {
+                        Interfaces.getComponent(558, 7).interact("Look up name");
+                    } else {
+                        String username = "riverside997";
+                        Keyboard.sendText(username);
+                        Time.sleepUntil(() -> Interfaces.getComponent(162, 45).getText().contains(username), Random.nextInt(2000, 3000));
+                        Keyboard.pressEnter();
+                    }
+                } else {
+                    Interfaces.getComponent(558, 15).interact("Set name");
+                    Time.sleep(Random.nextInt(2000, 2500));
+                }
             } else {
                 Interfaces.getComponent(558, 18).interact("Set name");
+                Time.sleep(Random.nextInt(2000, 2500));
             }
         } else if (Interfaces.isOpen(269)) {
             if (Interfaces.getComponent(269, 97).getText().contains("design your player")) {
@@ -595,7 +591,7 @@ public class TutIsland extends Task {
         }
     }
 
-    private static void addFriend(String name){
+    private static void addFriend(String name) {
         // Open friendslist if not open
         if (!Tabs.isOpen(Tab.FRIENDS_LIST)) {
             Tabs.open(Tab.FRIENDS_LIST);
@@ -622,9 +618,9 @@ public class TutIsland extends Task {
         // Clear inventory
         Item[] items = Inventory.getItems();
         for (Item item : items) {
-            if (!item.getName().equals("Bronze pickaxe")){
+            if (!item.getName().equals("Bronze pickaxe")) {
                 item.interact("Drop");
-                Time.sleep(Random.nextInt(500,1000));
+                Time.sleep(Random.nextInt(500, 1000));
             }
         }
 

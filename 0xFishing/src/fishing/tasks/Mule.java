@@ -110,6 +110,7 @@ public class Mule extends Task {
         }
     }
 
+    //trading is fucked - todo: https://discourse.rspeer.org/t/muling-snippet/3261
         private void tradeMule () {
             if (Trade.isOpen()) {
                 if (!Trade.isWaitingForMe()) {
