@@ -103,18 +103,20 @@ public class Mule extends Task {
                 Spell homeTP = Spell.Modern.HOME_TELEPORT;
                 Magic.cast(homeTP);
                 Time.sleepUntil(() -> homeTPArea.contains(Players.getLocal()), Random.nextInt(20000, 25000));
-            } else{
+            } else {
 
                 Movement.walkToRandomized(Fishtype.SHRIMPS.getBankingArea().getCenter());
             }
         }
     }
-
-    //trading is fucked - todo: https://discourse.rspeer.org/t/muling-snippet/3261
-        private void tradeMule () {
-            if (Trade.isOpen()) {
-                if (!Trade.isWaitingForMe()) {
-                    Item[] inventory = Inventory.getItems();
+    
+    private void tradeMule() {
+        if (Trade.isOpen()) {
+            if (Trade.isOpen(true) && Trade.isWaitingForMe()) {
+                Trade.accept();
+            } else {
+                Item[] inventory = Inventory.getItems();
+                if (!(inventory.length == 0)) {
                     for (Item i : inventory) {
                         if (i.getId() == 995 || i.getId() == 378) {
                             Trade.offerAll(i.getId());
@@ -124,12 +126,13 @@ public class Mule extends Task {
                 } else {
                     Trade.accept();
                 }
-            } else {
-                Player mule = Players.getNearest(MULE_NAME);
-                if (!mule.equals(null)) {
-                    mule.interact("Trade with");
-                    Time.sleepUntil(() -> Trade.isOpen(), Random.nextInt(7000, 10000));
-                }
+            }
+        } else {
+            Player mule = Players.getNearest(MULE_NAME);
+            if (!mule.equals(null)) {
+                mule.interact("Trade with");
+                Time.sleepUntil(() -> Trade.isOpen(), Random.nextInt(7000, 10000));
             }
         }
     }
+}
