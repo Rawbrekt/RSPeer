@@ -2,12 +2,12 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/0xChocolate/0xChocolate.iml" filepath="$PROJECT_DIR$/0xChocolate/0xChocolate.iml" />
       <module fileurl="file://$PROJECT_DIR$/0xCombat/0xCombat.iml" filepath="$PROJECT_DIR$/0xCombat/0xCombat.iml" />
       <module fileurl="file://$PROJECT_DIR$/0xCooking/0xCooking.iml" filepath="$PROJECT_DIR$/0xCooking/0xCooking.iml" />
       <module fileurl="file://$PROJECT_DIR$/0xFishing/0xFishing.iml" filepath="$PROJECT_DIR$/0xFishing/0xFishing.iml" />
       <module fileurl="file://$PROJECT_DIR$/0xGE/0xGE.iml" filepath="$PROJECT_DIR$/0xGE/0xGE.iml" />
       <module fileurl="file://$PROJECT_DIR$/0xSmelting/0xSmelting.iml" filepath="$PROJECT_DIR$/0xSmelting/0xSmelting.iml" />
-      <module fileurl="file://$PROJECT_DIR$/0xTutIsland/0xTutIsland.iml" filepath="$PROJECT_DIR$/0xTutIsland/0xTutIsland.iml" />
       <module fileurl="file://$PROJECT_DIR$/0xWoodcutting/0xWoodcutting.iml" filepath="$PROJECT_DIR$/0xWoodcutting/0xWoodcutting.iml" />
       <module fileurl="file://$PROJECT_DIR$/RSPeer Scripts.iml" filepath="$PROJECT_DIR$/RSPeer Scripts.iml" />
       <module fileurl="file://$PROJECT_DIR$/SocketServer/SocketServer.iml" filepath="$PROJECT_DIR$/SocketServer/SocketServer.iml" />

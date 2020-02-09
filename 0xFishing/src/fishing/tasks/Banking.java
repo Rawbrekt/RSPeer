@@ -10,17 +10,17 @@ import org.rspeer.runetek.api.component.tab.Inventory;
 import org.rspeer.runetek.api.scene.Players;
 import org.rspeer.runetek.api.scene.SceneObjects;
 import org.rspeer.script.task.Task;
-import org.rspeer.ui.Log;
 
 import java.util.function.Predicate;
 import static fishing.ZeroxFishing.fishtype;
+import static fishing.ZeroxFishing.questsFinished;
 import static fishing.ZeroxFishing.tutProgress;
 
 public class Banking extends Task {
 
     @Override
     public boolean validate() {
-        return shouldBank() && tutProgress == 1000;
+        return questsFinished() && shouldBank() && tutProgress == 1000;
     }
 
     @Override
@@ -45,9 +45,9 @@ public class Banking extends Task {
                         Time.sleepUntil(() -> Inventory.contains(fishtype.getItem()), Random.nextInt(2000, 3000));
                     }
 
-                    if (!Inventory.contains(fishtype.getBait())) {
+                    if (Bank.contains(fishtype.getBait())) {
                         Bank.withdrawAll(fishtype.getBait());
-                        Time.sleepUntil(() -> Inventory.contains(fishtype.getBait()), Random.nextInt(2000, 3000));
+                        Time.sleepUntil(() -> !Bank.contains(fishtype.getBait()), Random.nextInt(2000, 3000));
                     }
                 }
             } else {

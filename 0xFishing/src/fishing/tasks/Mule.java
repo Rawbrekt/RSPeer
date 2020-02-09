@@ -33,8 +33,7 @@ public class Mule extends Task {
         InterfaceComponent FriendlistWorld = Interfaces.getComponent(429, 11, 2);
         int fishinglvl = Skills.getCurrentLevel(Skill.FISHING);
 
-
-        return !muled && fishinglvl > 40 && FriendlistName != null && FriendlistName != null && FriendlistName.getText().equals(MULE_NAME) && FriendlistWorld.getText().equals(MULE_WORLD) && tutProgress == 1000;
+        return questsFinished() && !muled && fishinglvl > 40 && FriendlistName != null && FriendlistName != null && FriendlistName.getText().equals(MULE_NAME) && FriendlistWorld.getText().equals(MULE_WORLD) && tutProgress == 1000;
     }
 
     @Override

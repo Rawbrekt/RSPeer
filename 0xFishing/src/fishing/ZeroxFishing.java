@@ -23,13 +23,19 @@ public class ZeroxFishing extends TaskScript implements ChatMessageListener {
     public static String MULE_WORLD = "World 308";
     public static int MULE_WORLD_INT = 308;
     public static final int V_TUTISLAND = 281;
+    public static final int V_COOKS_ASSISTANT = 29;
+    public static final int V_SHEEP_SHEARER = 179;
+    public static final int V_ROMEO_AND_JULLIET = 144;
     public static int tutProgress;
+    public static int cookProgress;
+    public static int sheepProgress;
+    public static int romeoProgress;
 
 
 
     public static Fishtype fishtype = Fishtype.SHRIMPS;
 
-    private static final Task[] TASKS = {new TutIsland(), new Mule(), new Banking(), new Traverse(), new Fish()};
+    private static final Task[] TASKS = {new TutIsland(), new Quests(), new Mule(), new Banking(), new Traverse(), new Fish()};
 
     @Override
     public void onStart() {
@@ -37,20 +43,18 @@ public class ZeroxFishing extends TaskScript implements ChatMessageListener {
         int fishlvl = Skills.getCurrentLevel(Skill.FISHING);
         fishtype = Fishtype.getBestFishType(fishlvl);
 
-        Log.fine(fishtype);
-
         tutProgress = Varps.get(V_TUTISLAND);
-
-        /*if (fishlvl < 20) {
-            fishtype = Fishtype.SHRIMPS;
-        } else if (fishlvl < 40) {
-            fishtype = Fishtype.TROUT;
-        } else if (fishlvl > 40) {
-            fishtype = Fishtype.LOBSTERS;
-        }*/
+        cookProgress = Varps.get(V_COOKS_ASSISTANT);
+        sheepProgress = Varps.get(V_SHEEP_SHEARER);
+        romeoProgress = Varps.get(V_ROMEO_AND_JULLIET);
 
         submit(TASKS);
 
+    }
+
+    @Override
+    public void onStop() {
+        Log.info("Goodbye");
     }
 
     @Override
@@ -63,6 +67,14 @@ public class ZeroxFishing extends TaskScript implements ChatMessageListener {
         if (msg.getMessage().contains("has logged o")) {
             muled = false;
             Log.info("mule logged out");
+        }
+    }
+
+    public static boolean questsFinished() {
+        if (cookProgress == 2 && sheepProgress == 21 && romeoProgress == 100) {
+            return true;
+        } else {
+            return false;
         }
     }
 }

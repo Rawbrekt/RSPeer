@@ -20,6 +20,7 @@ import org.rspeer.script.task.Task;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
 import static fishing.ZeroxFishing.fishtype;
+import static fishing.ZeroxFishing.questsFinished;
 import static fishing.ZeroxFishing.tutProgress;
 
 public class Traverse extends Task {
@@ -35,7 +36,7 @@ public class Traverse extends Task {
 
     @Override
     public boolean validate() {
-        return (traverseToBank() || traverseToFish()) && tutProgress == 1000;
+        return questsFinished() && (traverseToBank() || traverseToFish()) && tutProgress == 1000;
     }
 
     @Override

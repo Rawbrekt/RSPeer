@@ -20,9 +20,9 @@ import java.util.function.Predicate;
 public class Fight extends Task {
 
     Player me = Players.getLocal();
-    int lvlAttack = Skills.getLevel(Skill.ATTACK);
-    int lvlStrength = Skills.getLevel(Skill.STRENGTH);
-    int lvlDefence = Skills.getLevel(Skill.DEFENCE);
+    int lvlAttack = Skills.getCurrentLevel(Skill.ATTACK);
+    int lvlStrength = Skills.getCurrentLevel(Skill.STRENGTH);
+    int lvlDefence = Skills.getCurrentLevel(Skill.DEFENCE);
     private int toggleNextRun = 20;
 
 

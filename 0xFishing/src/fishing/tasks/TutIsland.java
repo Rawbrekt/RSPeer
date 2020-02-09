@@ -30,6 +30,8 @@ import org.rspeer.script.task.Task;
 import org.rspeer.ui.Log;
 
 import java.security.Key;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Predicate;
 
 import static fishing.ZeroxFishing.MULE_NAME;
@@ -270,7 +272,10 @@ public class TutIsland extends Task {
                 }
                 break;
             case 405:
-                Interfaces.getComponent(85, 0, 8).interact("Equip");
+
+                Predicate<InterfaceComponent> daggerPred = d -> d.getItemId() == 1205;
+                Interfaces.getFirst(daggerPred).interact("Equip");
+                //Interfaces.getComponent(85, 0, 8).interact("Equip");
                 break;
             case 420:
                 if (Dialog.canContinue()) {
@@ -501,7 +506,7 @@ public class TutIsland extends Task {
                     if (Interfaces.getComponent(263, 1, 0).isVisible()) {
                         Interfaces.getComponent(558, 7).interact("Look up name");
                     } else {
-                        String username = "riverside997";
+                        String username = nameGeneator();
                         Keyboard.sendText(username);
                         Time.sleepUntil(() -> Interfaces.getComponent(162, 45).getText().contains(username), Random.nextInt(2000, 3000));
                         Keyboard.pressEnter();
@@ -629,4 +634,25 @@ public class TutIsland extends Task {
             inventoryReady = true;
         }
     }
+
+    public String nameGeneator() {
+
+        final String lexicon = "ABCDEFGHIJKLMNOPQRSTUVWXYZ12345674890";
+        final java.util.Random rand = new java.util.Random();
+        final Set<String> identifiers = new HashSet<String>();
+
+        StringBuilder builder = new StringBuilder();
+        while(builder.toString().length() == 0) {
+            int length = rand.nextInt(5)+5;
+            for(int i = 0; i < length; i++) {
+                builder.append(lexicon.charAt(rand.nextInt(lexicon.length())));
+            }
+            if(identifiers.contains(builder.toString())) {
+                builder = new StringBuilder();
+            }
+        }
+        return builder.toString();
+    }
+
+
 }
