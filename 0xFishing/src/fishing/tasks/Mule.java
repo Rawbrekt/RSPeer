@@ -15,6 +15,7 @@ import org.rspeer.runetek.api.component.WorldHopper;
 import org.rspeer.runetek.api.component.tab.*;
 import org.rspeer.runetek.api.movement.Movement;
 import org.rspeer.runetek.api.movement.position.Area;
+import org.rspeer.runetek.api.movement.position.Position;
 import org.rspeer.runetek.api.scene.Players;
 import org.rspeer.runetek.api.scene.SceneObjects;
 import org.rspeer.script.task.Task;
@@ -33,22 +34,28 @@ public class Mule extends Task {
         InterfaceComponent FriendlistWorld = Interfaces.getComponent(429, 11, 2);
         int fishinglvl = Skills.getCurrentLevel(Skill.FISHING);
 
-        return questsFinished() && !muled && fishinglvl > 40 && FriendlistName != null && FriendlistName != null && FriendlistName.getText().equals(MULE_NAME) && FriendlistWorld.getText().equals(MULE_WORLD) && tutProgress == 1000;
+        return questsFinished() && !muled && fishinglvl > 40 && FriendlistName != null && FriendlistName.getText().equals(MULE_NAME) && FriendlistWorld.getText().equals(MULE_WORLD) && tutProgress == 1000;
     }
 
     @Override
     public int execute() {
 
-        if (Worlds.getCurrent() != MULE_WORLD_INT) {
+        if (Players.getLocal().getAnimation() == 619) {
+            Log.info("move");
+            Position currentPos = Players.getLocal().getPosition();
+            Movement.walkTo(currentPos.translate(currentPos.getX()+1,currentPos.getY()+1));
+
+        } else if (Worlds.getCurrent() != MULE_WORLD_INT) {
+            Log.info("hop");
             worldHop();
         } else {
+            Log.info("bank");
             if (!banked) {
                 getNotedLobsters();
             } else {
                 tradeMule();
             }
         }
-
         return 0;
     }
 
@@ -66,8 +73,6 @@ public class Mule extends Task {
                     Bank.depositInventory();
                     Time.sleepUntil(() -> Inventory.isEmpty(), Random.nextInt(500, 1500));
                 }
-
-                Log.info(Bank.contains(995));
 
                 if (Bank.contains(995)) {
                     Bank.withdrawAll(995);
@@ -103,7 +108,6 @@ public class Mule extends Task {
                 Magic.cast(homeTP);
                 Time.sleepUntil(() -> homeTPArea.contains(Players.getLocal()), Random.nextInt(20000, 25000));
             } else {
-
                 Movement.walkToRandomized(Fishtype.SHRIMPS.getBankingArea().getCenter());
             }
         }

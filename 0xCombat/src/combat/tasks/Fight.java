@@ -20,9 +20,6 @@ import java.util.function.Predicate;
 public class Fight extends Task {
 
     Player me = Players.getLocal();
-    int lvlAttack = Skills.getCurrentLevel(Skill.ATTACK);
-    int lvlStrength = Skills.getCurrentLevel(Skill.STRENGTH);
-    int lvlDefence = Skills.getCurrentLevel(Skill.DEFENCE);
     private int toggleNextRun = 20;
 
 
@@ -61,6 +58,11 @@ public class Fight extends Task {
     }
 
     private void changeAttackStyle() {
+
+        int lvlAttack = Skills.getCurrentLevel(Skill.ATTACK);
+        int lvlStrength = Skills.getCurrentLevel(Skill.STRENGTH);
+        int lvlDefence = Skills.getCurrentLevel(Skill.DEFENCE);
+
         if (lvlStrength < ZeroxCombat.goal) {
             Combat.select(1);
             Time.sleep(Random.nextInt(100,1500));

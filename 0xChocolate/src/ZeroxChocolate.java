@@ -23,16 +23,17 @@ import java.util.function.Predicate;
 
 public class ZeroxChocolate extends Script implements RenderListener {
 
-    Area GRAND_EXCHANGE = Area.rectangular(3160, 3493, 3169, 3486);
+    Area GRAND_EXCHANGE = Area.rectangular(3151, 3502, 3181, 3475);
     int KNIFE = 946;
     int CHOCOLATE = 1973;
     int CHOCOLATE_DUST = 1975;
-    int GROUND = 0;
+    int GROUND;
     private long startTime;
 
     @Override
     public void onStart(){
         startTime = System.currentTimeMillis();
+        GROUND = 0;
     }
 
     @Override
@@ -44,9 +45,6 @@ public class ZeroxChocolate extends Script implements RenderListener {
                 Inventory.use(x -> x.getName().equals("Knife"),chocolate);
             } else {
                 if (Bank.isOpen()) {
-
-                    Bank.depositAllExcept(KNIFE,CHOCOLATE);
-                    Time.sleepUntil(() -> Inventory.containsOnly(KNIFE), Random.nextInt(3000,5000));
 
                     if (!Bank.contains(CHOCOLATE)) {
                         return -1;
@@ -61,9 +59,11 @@ public class ZeroxChocolate extends Script implements RenderListener {
 
                         GROUND += Inventory.getCount(CHOCOLATE_DUST);
 
+                        Bank.depositAllExcept(KNIFE,CHOCOLATE);
                         Time.sleepUntil(() -> Inventory.containsOnly(KNIFE), Random.nextInt(3000,5000));
 
                         Bank.withdrawAll(CHOCOLATE);
+
                         Time.sleepUntil(() -> Inventory.isFull(), Random.nextInt(3000,5000));
                     }
                 } else {
@@ -80,7 +80,7 @@ public class ZeroxChocolate extends Script implements RenderListener {
             Movement.walkToRandomized(GRAND_EXCHANGE.getCenter());
         }
 
-        return 0;
+        return 50;
     }
 
     @Override

@@ -1,5 +1,3 @@
-package fishing.tasks;
-
 import org.rspeer.runetek.adapter.Interactable;
 import org.rspeer.runetek.adapter.component.InterfaceComponent;
 import org.rspeer.runetek.adapter.component.Item;
@@ -25,29 +23,31 @@ import org.rspeer.runetek.api.movement.position.Position;
 import org.rspeer.runetek.api.scene.Npcs;
 import org.rspeer.runetek.api.scene.Players;
 import org.rspeer.runetek.api.scene.SceneObjects;
-import org.rspeer.script.task.Task;
+import org.rspeer.script.Script;
+import org.rspeer.script.ScriptCategory;
+import org.rspeer.script.ScriptMeta;
 import org.rspeer.ui.Log;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Predicate;
 
-import static fishing.ZeroxFishing.MULE_NAME;
-import static fishing.ZeroxFishing.V_TUTISLAND;
-import static fishing.ZeroxFishing.tutProgress;
+@ScriptMeta(name = "0xTut", desc = "Tries to do tutorial island.", category = ScriptCategory.QUESTING, developer = "0xRip", version = 0.1)
 
-public class TutIsland extends Task {
+public class Main extends Script {
 
+    public static String MULE_NAME = "71opossum388";
+    public static final int V_TUTISLAND = 281;
+    public static int tutProgress = 0;
     private boolean runToggled = false;
-    private static boolean inventoryReady = false;
+
 
     @Override
-    public boolean validate() {
-        return tutProgress != 1000;
-    }
+    public int loop() {
 
-    @Override
-    public int execute() {
+        InterfaceComponent iCantReachThat = Interfaces.getComponent(162,44);
+        InterfaceComponent clickToContinue = Interfaces.getComponent(162,45);
+
         tutProgress = Varps.get(V_TUTISLAND);
         boolean doDefault = false;
         Predicate<String> defaultAction = a -> true;
@@ -57,7 +57,11 @@ public class TutIsland extends Task {
         combatLadderLocation = Area.rectangular(new Position(3111, 9525, 0), new Position(3111, 9525, 0));
         magicLocation = Area.rectangular(new Position(3141, 3088, 0), new Position(3141, 3088, 0));
 
-        Log.info("" + tutProgress);
+        /*if(iCantReachThat.isVisible()){
+            if(clickToContinue.isVisible()) {
+                Game.getClient().fireScriptEvent(299, 1, 1);
+            }
+        }*/
 
         switch (tutProgress) {
             case 1:
@@ -154,10 +158,12 @@ public class TutIsland extends Task {
                 break;
             case 120:
             case 360:
-                SceneObjects.getNearest("Gate").interact("Open");
+                Predicate<SceneObject> gatePred = g -> g.getName().equals("Gate");
+                SceneObjects.getNearest(gatePred).interact("Open");
                 break;
             case 130:
-                SceneObjects.getNearest("Door").interact("Open");
+                Predicate<SceneObject> doorPred = d -> d.getName().equals("Door");
+                SceneObjects.getNearest(doorPred).interact("Open");
                 break;
             case 140:
             case 330:
@@ -263,17 +269,15 @@ public class TutIsland extends Task {
             case 400:
                 if (Tabs.isOpen(Tab.EQUIPMENT)) {
                     Interfaces.getComponent(387, 1).interact("Use");
-                    Time.sleepUntil(() -> Interfaces.getComponent(84, 0).isVisible(), Random.nextInt(2000, 2500));
+                    Time.sleep(Random.nextInt(0, 2500));
                 } else {
                     Tabs.open(Tab.EQUIPMENT);
                     Time.sleepUntil(() -> Tabs.isOpen(Tab.EQUIPMENT), Random.nextInt(2000, 2500));
                 }
                 break;
             case 405:
-
-                Predicate<InterfaceComponent> daggerPred = d -> d.getItemId() == 1205;
-                Interfaces.getFirst(daggerPred).interact("Equip");
-                //Interfaces.getComponent(85, 0, 8).interact("Equip");
+                Item i = Inventory.getFirst(1205);
+                i.interact("Wield");
                 break;
             case 420:
                 if (Dialog.canContinue()) {
@@ -304,7 +308,9 @@ public class TutIsland extends Task {
                 if (Movement.isInteractable(Npcs.getNearest("Combat Instructor"))) {
                     doDefault = true;
                 } else {
-                    SceneObjects.getNearest(so -> so.getName().equalsIgnoreCase("Gate") && so.getY() > 9515).interact("Open");
+                    gatePred = g -> g.getName().equals("Gate");
+                    SceneObjects.getNearest(gatePred).interact("Open");
+                    //SceneObjects.getNearest(so -> so.getName().equalsIgnoreCase("Gate") && so.getY() > 9515).interact("Open");
                 }
                 break;
             case 480:
@@ -607,30 +613,6 @@ public class TutIsland extends Task {
         Keyboard.sendText(name);
         Time.sleepUntil(() -> Interfaces.getComponent(162, 45).getText().contains(MULE_NAME), Random.nextInt(2000, 2500));
         Keyboard.pressEnter();
-    }
-
-    private static void readyInventory() {
-
-        // Wield pickaxe
-        Log.info("Equipping pickaxe");
-        if (Inventory.contains(1265)) {
-            Inventory.getFirst(1265).interact(a -> true);
-            Time.sleepUntil(() -> !Inventory.contains("Bronze pickaxe"), Random.nextInt(2000, 2500));
-        }
-
-        // Clear inventory
-        Item[] items = Inventory.getItems();
-        for (Item item : items) {
-            if (!item.getName().equals("Bronze pickaxe")) {
-                item.interact("Drop");
-                Time.sleep(Random.nextInt(500, 1000));
-            }
-        }
-
-        Time.sleepUntil(() -> Inventory.isEmpty(), Random.nextInt(2000, 2500));
-        if (Inventory.isEmpty()) {
-            inventoryReady = true;
-        }
     }
 
     public String nameGeneator() {

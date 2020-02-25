@@ -44,7 +44,7 @@ public class Cook extends Task {
     }
 
     private boolean shouldCook() {
-        return ZeroxCooking.res.getCOOKING_AREA().contains(Players.getLocal()) && Inventory.contains(ZeroxCooking.res.getItem());
+        return ZeroxCooking.res != null && ZeroxCooking.res.getCOOKING_AREA().contains(Players.getLocal()) && Inventory.contains(ZeroxCooking.res.getItem());
     }
 
     private boolean isAnimating() {

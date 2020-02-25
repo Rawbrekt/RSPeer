@@ -39,6 +39,6 @@ public class Banking extends Task {
     }
 
     private boolean shouldBank() {
-        return ZeroxCooking.res.getBANKING_AREA().contains(Players.getLocal()) && !Inventory.contains(ZeroxCooking.res.getItem());
+        return ZeroxCooking.res != null && ZeroxCooking.res.getBANKING_AREA().contains(Players.getLocal()) && !Inventory.contains(ZeroxCooking.res.getItem());
     }
 }

@@ -13,13 +13,15 @@ import org.rspeer.script.task.Task;
 import org.rspeer.script.task.TaskScript;
 import org.rspeer.ui.Log;
 
-@ScriptMeta(name = "0xFishing", desc = "Tries to fish.", category = ScriptCategory.FISHING, developer = "0xRip", version = 0.1)
+import java.util.concurrent.TimeUnit;
+
+@ScriptMeta(name = "0xFishing50", desc = "Tries to fish to 50.", category = ScriptCategory.FISHING, developer = "0xRip", version = 0.1)
 
 public class ZeroxFishing extends TaskScript implements ChatMessageListener {
 
     public static boolean muled = false;
     public static boolean banked = false;
-    public static String MULE_NAME = "Maxi Riprekt";
+    public static String MULE_NAME = "71opossum388";
     public static String MULE_WORLD = "World 308";
     public static int MULE_WORLD_INT = 308;
     public static final int V_TUTISLAND = 281;
@@ -30,6 +32,7 @@ public class ZeroxFishing extends TaskScript implements ChatMessageListener {
     public static int cookProgress;
     public static int sheepProgress;
     public static int romeoProgress;
+    private long startTime;
 
 
 
@@ -43,6 +46,8 @@ public class ZeroxFishing extends TaskScript implements ChatMessageListener {
         int fishlvl = Skills.getCurrentLevel(Skill.FISHING);
         fishtype = Fishtype.getBestFishType(fishlvl);
 
+        startTime = System.currentTimeMillis();
+
         tutProgress = Varps.get(V_TUTISLAND);
         cookProgress = Varps.get(V_COOKS_ASSISTANT);
         sheepProgress = Varps.get(V_SHEEP_SHEARER);
@@ -54,14 +59,17 @@ public class ZeroxFishing extends TaskScript implements ChatMessageListener {
 
     @Override
     public void onStop() {
-        Log.info("Goodbye");
+        Log.info(Skills.getCurrentLevel(Skill.FISHING));
+        long runningTime = System.currentTimeMillis() - startTime;
+        Log.info(formatTime(runningTime));
     }
 
     @Override
     public void notify(ChatMessageEvent msg) {
-        if(msg.getMessage().equals("Accepted trade")) {
+        if(msg.getMessage().contains("Accepted trade")) {
             muled = true;
             Log.info("trade done");
+            this.setStopping(true);
         }
 
         if (msg.getMessage().contains("has logged o")) {
@@ -74,7 +82,36 @@ public class ZeroxFishing extends TaskScript implements ChatMessageListener {
         if (cookProgress == 2 && sheepProgress == 21 && romeoProgress == 100) {
             return true;
         } else {
-            return false;
+            return true;
         }
+    }
+    private String formatTime(long r){
+
+        //long days = TimeUnit.MILLISECONDS.toDays(r);
+        long hours = TimeUnit.MILLISECONDS.toHours(r);
+        long minutes = TimeUnit.MILLISECONDS.toMinutes(r) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(r));
+        long seconds = TimeUnit.MILLISECONDS.toSeconds(r) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(r));
+        String res = "";
+
+        if( hours < 10 ){
+            res = res + "0" + hours + ":";
+        }
+        else{
+            res = res + hours + ":";
+        }
+        if(minutes < 10){
+            res = res + "0" + minutes + ":";
+        }
+        else{
+            res = res + minutes + ":";
+        }
+        if(seconds < 10){
+            res = res + "0" + seconds;
+        }
+        else{
+            res = res + seconds;
+        }
+
+        return res;
     }
 }

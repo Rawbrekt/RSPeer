@@ -1,5 +1,6 @@
 package cooking;
 
+import cooking.data.GUI;
 import cooking.data.Resources;
 import org.rspeer.script.ScriptCategory;
 import org.rspeer.script.ScriptMeta;
@@ -13,11 +14,12 @@ import cooking.tasks.Traverse;
 
 public class ZeroxCooking extends TaskScript {
 
-    public static Resources res = Resources.ANCHOVIES;
+    public static Resources res;
 
     private static final Task[] TASKS = {new Banking(), new Traverse(), new Cook()};
     @Override
     public void onStart() {
+        new GUI().setVisible(true);
         submit(TASKS);
     }
 }

@@ -29,16 +29,21 @@ public class Banking extends Task {
             if (Bank.isOpen()) {
                 if (fishtype.getBait() == 0) {
 
-                    Bank.depositAllExcept(fishtype.getItem());
-
                     if (!Inventory.contains(fishtype.getItem())) {
-                        Bank.withdraw(fishtype.getItem(), 1);
-                        Time.sleepUntil(() -> Inventory.contains(fishtype.getItem()), Random.nextInt(2000, 3000));
+                        if (!Inventory.isEmpty()) {
+                            Bank.depositAllExcept(fishtype.getItem());
+                            Time.sleepUntil(() -> Inventory.isEmpty(), Random.nextInt(1500,2750));
+                        } else{
+                            Bank.withdraw(fishtype.getItem(), 1);
+                            Time.sleepUntil(() -> Inventory.contains(fishtype.getItem()), Random.nextInt(2000, 3000));
+                        }
+
                     }
+
+                    Bank.depositAllExcept(fishtype.getItem());
 
                 } else {
 
-                    Bank.depositAllExcept(fishtype.getItem(), fishtype.getBait());
 
                     if (!Inventory.contains(fishtype.getItem())) {
                         Bank.withdraw(fishtype.getItem(), 1);
@@ -49,6 +54,8 @@ public class Banking extends Task {
                         Bank.withdrawAll(fishtype.getBait());
                         Time.sleepUntil(() -> !Bank.contains(fishtype.getBait()), Random.nextInt(2000, 3000));
                     }
+
+                    Bank.depositAllExcept(fishtype.getItem(), fishtype.getBait());
                 }
             } else {
                 if (fishtype.getBait() == 0) {
