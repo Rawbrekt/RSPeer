@@ -1,6 +1,5 @@
 package fishlooting.tasks;
 
-import org.rspeer.runetek.adapter.component.InterfaceComponent;
 import org.rspeer.runetek.adapter.component.Item;
 import org.rspeer.runetek.adapter.scene.Player;
 import org.rspeer.runetek.adapter.scene.SceneObject;
@@ -29,7 +28,7 @@ public class Mule extends Task {
     @Override
     public boolean validate() {
 
-        return !muled && BefriendedPlayers.getFirst(MULE_NAME).getWorld() == MULE_WORLD_INT;
+        return !muled && BefriendedPlayers.getFirst(MULE_NAME).getWorld() == MULE_WORLD_INT && tutProgress == 1000;
     }
 
     @Override
