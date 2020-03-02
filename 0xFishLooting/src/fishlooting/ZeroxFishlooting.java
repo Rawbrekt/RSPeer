@@ -5,6 +5,7 @@ import org.rspeer.runetek.api.ClientSupplier;
 import org.rspeer.runetek.api.Varps;
 import org.rspeer.runetek.api.movement.position.Area;
 import org.rspeer.runetek.event.listeners.ChatMessageListener;
+import org.rspeer.runetek.event.listeners.LoginResponseListener;
 import org.rspeer.runetek.event.listeners.RenderListener;
 import org.rspeer.runetek.event.types.ChatMessageEvent;
 import org.rspeer.runetek.event.types.LoginResponseEvent;
@@ -25,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 
 @ScriptMeta(name = "0xFishLooter", desc = "Tries to loot fish.", category = ScriptCategory.MONEY_MAKING, developer = "0xRip", version = 0.1)
 
-public class ZeroxFishlooting extends TaskScript implements ChatMessageListener, RenderListener {
+public class ZeroxFishlooting extends TaskScript implements ChatMessageListener, RenderListener,LoginResponseListener {
 
     public static boolean muled = false;
     public static boolean banked = false;
@@ -36,7 +37,7 @@ public class ZeroxFishlooting extends TaskScript implements ChatMessageListener,
     public static int tutProgress;
     public static String currentTask;
     private static Scanner x;
-
+    private static boolean banned;
     private long startTime;
     public static long lastFish;
 
@@ -64,17 +65,21 @@ public class ZeroxFishlooting extends TaskScript implements ChatMessageListener,
         long runningTime = System.currentTimeMillis() - startTime;
         Log.info(formatTime(runningTime));
 
-        String username = ClientSupplier.get().getUsername();
-        String status = "new";
-        updateStatus(username,status);
+        if (!banned) {
+            String username = ClientSupplier.get().getUsername();
+            String status = "new";
+            updateStatus(username,status);
+        }
     }
 
+    @Override
     public void notify(LoginResponseEvent loginResponseEvent) {
         LoginResponseEvent.Response response = loginResponseEvent.getResponse();
         if (response == LoginResponseEvent.Response.ACCOUNT_DISABLED) {
             String username = ClientSupplier.get().getUsername();
             String status = "banned";
             updateStatus(username,status);
+            banned = true;
         }
     }
 
