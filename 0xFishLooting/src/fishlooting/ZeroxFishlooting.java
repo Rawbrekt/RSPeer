@@ -1,11 +1,13 @@
 package fishlooting;
 
 import fishlooting.tasks.*;
+import org.rspeer.runetek.api.ClientSupplier;
 import org.rspeer.runetek.api.Varps;
 import org.rspeer.runetek.api.movement.position.Area;
 import org.rspeer.runetek.event.listeners.ChatMessageListener;
 import org.rspeer.runetek.event.listeners.RenderListener;
 import org.rspeer.runetek.event.types.ChatMessageEvent;
+import org.rspeer.runetek.event.types.LoginResponseEvent;
 import org.rspeer.runetek.event.types.RenderEvent;
 import org.rspeer.script.ScriptCategory;
 import org.rspeer.script.ScriptMeta;
@@ -14,6 +16,11 @@ import org.rspeer.script.task.TaskScript;
 import org.rspeer.ui.Log;
 
 import java.awt.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 @ScriptMeta(name = "0xFishLooter", desc = "Tries to loot fish.", category = ScriptCategory.MONEY_MAKING, developer = "0xRip", version = 0.1)
@@ -28,6 +35,7 @@ public class ZeroxFishlooting extends TaskScript implements ChatMessageListener,
     public static int V_TUTISLAND = 281;
     public static int tutProgress;
     public static String currentTask;
+    private static Scanner x;
 
     private long startTime;
     public static long lastFish;
@@ -45,12 +53,29 @@ public class ZeroxFishlooting extends TaskScript implements ChatMessageListener,
         tutProgress = Varps.get(V_TUTISLAND);
         submit(TASKS);
 
+        String username = ClientSupplier.get().getUsername();
+        String status = "running";
+        updateStatus(username,status);
+
     }
 
     @Override
     public void onStop() {
         long runningTime = System.currentTimeMillis() - startTime;
         Log.info(formatTime(runningTime));
+
+        String username = ClientSupplier.get().getUsername();
+        String status = "new";
+        updateStatus(username,status);
+    }
+
+    public void notify(LoginResponseEvent loginResponseEvent) {
+        LoginResponseEvent.Response response = loginResponseEvent.getResponse();
+        if (response == LoginResponseEvent.Response.ACCOUNT_DISABLED) {
+            String username = ClientSupplier.get().getUsername();
+            String status = "banned";
+            updateStatus(username,status);
+        }
     }
 
     @Override
@@ -110,5 +135,46 @@ public class ZeroxFishlooting extends TaskScript implements ChatMessageListener,
         g2d.drawString("Runtime: " + formatTime(runningTime), 20, 40);
         g2d.drawString("Time since last fish: " + formatTime(fishTime), 20, 60);
         g2d.drawString("Task: " + currentTask, 20, 80);
+    }
+
+    public static void updateStatus(String searchUsername, String newStatus) {
+        String filepath = "C:\\Users\\Riprekt\\Documents\\RSPeer\\account creator\\accounts.csv";
+        String username = ""; String password = ""; String status = "";
+        String tempfile = "temp.txt";
+        File oldFile = new File(filepath);
+        File newFile = new File(tempfile);
+
+
+        try {
+            FileWriter fw = new FileWriter(tempfile,true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            PrintWriter pw = new PrintWriter(bw);
+
+            x = new Scanner(new File(filepath));
+            x.useDelimiter("[,\n\r]");
+
+            while (x.hasNext()) {
+                username = x.next();
+                password = x.next();
+                status = x.next();
+
+                if (username.equals(searchUsername)) {
+                    pw.print(username + "," + password + "," + newStatus + "\n");
+                } else {
+                    pw.print(username + "," + password + "," + status + "\n");
+                }
+            }
+            x.close();
+            pw.flush();
+            pw.close();
+            oldFile.delete();
+            File dump = new File(filepath);
+            newFile.renameTo(dump);
+        }
+        catch (Exception e) {
+            System.out.println("Error");
+        }
+
+
     }
 }

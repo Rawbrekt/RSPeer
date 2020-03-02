@@ -11,10 +11,6 @@ import org.rspeer.runetek.api.component.tab.Inventory;
 import org.rspeer.runetek.api.scene.Players;
 import org.rspeer.runetek.api.scene.SceneObjects;
 import org.rspeer.script.task.Task;
-import org.rspeer.ui.Log;
-
-import java.util.function.Predicate;
-
 import static crafting.ZeroxGoldJewel.furnaceArea;
 import static crafting.ZeroxGoldJewel.toCraft;
 

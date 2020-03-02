@@ -9,7 +9,6 @@ import org.rspeer.runetek.api.component.tab.Inventory;
 import org.rspeer.runetek.api.scene.Players;
 import org.rspeer.runetek.api.scene.SceneObjects;
 import org.rspeer.script.task.Task;
-import org.rspeer.ui.Log;
 
 import static crafting.ZeroxGoldJewel.bankArea;
 import static crafting.ZeroxGoldJewel.toCraft;
@@ -22,7 +21,6 @@ public class Banking extends Task {
 
     @Override
     public int execute() {
-        Log.info("Banking");
         if (Bank.isOpen()) {
             if (!Inventory.isEmpty()) {
                 Bank.depositAllExcept(toCraft.getRawMaterial(), toCraft.getMould());

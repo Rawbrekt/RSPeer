@@ -1,6 +1,8 @@
 package fishlooting.tasks;
 
+import org.rspeer.runetek.api.Worlds;
 import org.rspeer.runetek.api.commons.math.Random;
+import org.rspeer.runetek.api.component.WorldHopper;
 import org.rspeer.runetek.api.component.tab.Inventory;
 import org.rspeer.runetek.api.movement.Movement;
 import org.rspeer.runetek.api.scene.Players;
@@ -22,7 +24,13 @@ public class Traverse extends Task {
 
     @Override
     public int execute() {
+
         currentTask = "Walking";
+
+        if (Worlds.getCurrent() == MULE_WORLD_INT) {
+            WorldHopper.randomHopInF2p();
+        }
+
         checkRunEnergy();
         Movement.walkToRandomized(traverseToBank() ? bankArea.getCenter() : lootArea.getCenter());
         return Random.nextInt(750, 3250);

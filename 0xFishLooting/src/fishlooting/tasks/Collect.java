@@ -29,9 +29,6 @@ public class Collect extends Task {
     @Override
     public int execute() {
 
-        if (Worlds.getCurrent() == MULE_WORLD_INT) {
-            WorldHopper.randomHopInF2p();
-        }
         currentTask = "Collecting fish";
 
         Predicate<Pickable> fishPred = f -> f.getId() == 329 || f.getId() == 331 || f.getId() == 333 || f.getId() == 335;

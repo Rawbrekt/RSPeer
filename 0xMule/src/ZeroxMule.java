@@ -1,3 +1,4 @@
+import org.rspeer.RSPeer;
 import org.rspeer.runetek.adapter.component.Item;
 import org.rspeer.runetek.adapter.scene.Player;
 import org.rspeer.runetek.api.commons.math.Random;
@@ -11,6 +12,8 @@ import org.rspeer.script.ScriptCategory;
 import org.rspeer.script.ScriptMeta;
 import org.rspeer.ui.Log;
 
+import java.util.Scanner;
+
 @ScriptMeta(name = "0xMule", desc = "Tries to mule", category = ScriptCategory.MONEY_MAKING, developer = "0xRip", version = 0.1)
 
 public class ZeroxMule extends Script implements ChatMessageListener {
@@ -18,6 +21,7 @@ public class ZeroxMule extends Script implements ChatMessageListener {
     private String traderName = "";
     private int tradesFinished = 0;
     private String items = "";
+    private static Scanner x;
 
     @Override
     public int loop() {
@@ -63,5 +67,10 @@ public class ZeroxMule extends Script implements ChatMessageListener {
             items = "";
         }
 
+    }
+
+    @Override
+    public void onStop() {
+        RSPeer.shutdown();
     }
 }

@@ -26,7 +26,6 @@ public class Traverse extends Task {
 
     @Override
     public int execute() {
-        Log.info("Traversing");
         checkRunEnergy();
         Movement.walkToRandomized(traverseToBank() ? bankArea.getCenter() : furnaceArea.getCenter());
         return Random.nextInt(200, 1500);
