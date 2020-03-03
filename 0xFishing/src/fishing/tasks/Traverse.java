@@ -5,6 +5,7 @@ import org.rspeer.runetek.adapter.component.InterfaceComponent;
 import org.rspeer.runetek.adapter.component.Item;
 import org.rspeer.runetek.adapter.scene.Npc;
 import org.rspeer.runetek.adapter.scene.SceneObject;
+import org.rspeer.runetek.api.Game;
 import org.rspeer.runetek.api.commons.Time;
 import org.rspeer.runetek.api.commons.math.Random;
 import org.rspeer.runetek.api.component.Dialog;
@@ -19,6 +20,7 @@ import org.rspeer.script.task.Task;
 
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
+
 import static fishing.ZeroxFishing.fishtype;
 import static fishing.ZeroxFishing.questsFinished;
 import static fishing.ZeroxFishing.tutProgress;
@@ -36,7 +38,7 @@ public class Traverse extends Task {
 
     @Override
     public boolean validate() {
-        return questsFinished() && (traverseToBank() || traverseToFish()) && tutProgress == 1000;
+        return Game.isLoggedIn() && !Game.isLoadingRegion() && questsFinished() && (traverseToBank() || traverseToFish()) && tutProgress == 1000;
     }
 
     @Override
@@ -55,9 +57,15 @@ public class Traverse extends Task {
             if (KARAMJA_BOAT.contains(Players.getLocal()) || PORT_SARIM_BOAT.contains(Players.getLocal())) {
                 Predicate<SceneObject> plankPred = p -> p.getName().contains("Gangplank");
                 SceneObject plank = SceneObjects.getNearest(plankPred);
-
-                if (plank != null) {
-                    plank.interact("Cross");
+                if (Dialog.isOpen()) {
+                    if (Dialog.canContinue()) {
+                        Dialog.processContinue();
+                    }
+                }
+                if (!Dialog.isOpen()) {
+                    if (plank != null) {
+                        plank.interact("Cross");
+                    }
                 }
             }
             if (fishtype.equals(Fishtype.LOBSTERS)) {

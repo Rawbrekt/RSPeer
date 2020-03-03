@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="0xTut:jar">
-    <output-path>$PROJECT_DIR$/../RSPeer/scripts</output-path>
-    <root id="archive" name="0xTut.jar">
-      <element id="module-output" name="0xTut" />
-    </root>
-  </artifact>
-</component>

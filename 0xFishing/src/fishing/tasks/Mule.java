@@ -5,6 +5,7 @@ import org.rspeer.runetek.adapter.component.InterfaceComponent;
 import org.rspeer.runetek.adapter.component.Item;
 import org.rspeer.runetek.adapter.scene.Player;
 import org.rspeer.runetek.adapter.scene.SceneObject;
+import org.rspeer.runetek.api.Game;
 import org.rspeer.runetek.api.Worlds;
 import org.rspeer.runetek.api.commons.Time;
 import org.rspeer.runetek.api.commons.math.Random;
@@ -34,7 +35,7 @@ public class Mule extends Task {
         InterfaceComponent FriendlistWorld = Interfaces.getComponent(429, 11, 2);
         int fishinglvl = Skills.getCurrentLevel(Skill.FISHING);
 
-        return questsFinished() && !muled && fishinglvl > 40 && FriendlistName != null && FriendlistName.getText().equals(MULE_NAME) && FriendlistWorld.getText().equals(MULE_WORLD) && tutProgress == 1000;
+        return Game.isLoggedIn() && !Game.isLoadingRegion() && questsFinished() && !muled && fishinglvl > 40 && FriendlistName != null && FriendlistName.getText().equals(MULE_NAME) && FriendlistWorld.getText().equals(MULE_WORLD) && tutProgress == 1000;
     }
 
     @Override

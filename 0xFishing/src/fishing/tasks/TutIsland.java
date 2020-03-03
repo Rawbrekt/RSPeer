@@ -43,7 +43,7 @@ public class TutIsland extends Task {
 
     @Override
     public boolean validate() {
-        return tutProgress != 1000;
+        return Game.isLoggedIn() && !Game.isLoadingRegion() && tutProgress != 1000;
     }
 
     @Override
