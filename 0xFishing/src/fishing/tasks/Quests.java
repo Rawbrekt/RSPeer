@@ -23,8 +23,12 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
 
 import static fishing.ZeroxFishing.*;
+import static fishing.tasks.GetStartingGold.COINS;
+import static fishing.tasks.GetStartingGold.TUTORIAL_ISLAND_ITEMS;
 
 public class Quests extends Task {
+
+    boolean hasStartersGold;
 
     private Area LUMBRIDGE_BANK = Area.rectangular(3210, 3215, 3207, 3220, 2);
     private Area COOK = Area.rectangular(3205, 3217, 3212, 3212);
@@ -44,8 +48,10 @@ public class Quests extends Task {
 
     @Override
     public boolean validate() {
-
-        return !questsFinished() && tutProgress == 1000;
+        if (Inventory.containsAll(TUTORIAL_ISLAND_ITEMS) && Inventory.contains(COINS)) {
+            hasStartersGold = true;
+        }
+        return Game.isLoggedIn() && !Game.isLoadingRegion() && !questsFinished() && tutProgress == 1000 && hasStartersGold;
     }
 
     @Override
@@ -85,6 +91,8 @@ public class Quests extends Task {
                             }
                         } else {
                             Log.severe("does not have cooks assistant quest items");
+                            Bank.depositInventory();
+
                         }
                     } else {
                         Predicate<SceneObject> bankPred = b -> b.containsAction("Bank");
@@ -128,6 +136,8 @@ public class Quests extends Task {
                             Time.sleepUntil(() -> Inventory.getCount(itemsSheep) == 20, Random.nextInt(3000, 6000));
                         } else {
                             Log.severe("does not have sheep shearer quest items");
+                            Bank.depositInventory();
+
                         }
                     } else {
                         Predicate<SceneObject> bankPred = b -> b.containsAction("Bank");
@@ -167,7 +177,7 @@ public class Quests extends Task {
                 case 10:
                     if (JULIET.contains(Players.getLocal())) {
                         if (Dialog.isOpen()) {
-                            solveDialog();
+                            solveDialog("Something else.");
                         } else {
                             Predicate<Npc> julietPred = j -> j.getName().equals("Juliet");
                             Npc juliet = Npcs.getNearest(julietPred);
@@ -225,7 +235,7 @@ public class Quests extends Task {
                 case 40:
                 case 50:
                     if (Dialog.isOpen()) {
-                        solveDialog("Talk about something else.", "Talk about Romeo & Juliet.", "Ok, thanks.");
+                        solveDialog("Talk about something else.", "Talk about Romeo & Juliet.", "Ok, thanks.", "Something else.");
                     } else if (Inventory.contains(756)) {
                         if (JULIET.contains(Players.getLocal())) {
                             Predicate<Npc> julietPred = j -> j.getName().equals("Juliet");
@@ -257,6 +267,8 @@ public class Quests extends Task {
                                     Time.sleepUntil(() -> Inventory.contains(itemsRomeo), Random.nextInt(3000, 6000));
                                 } else {
                                     Log.severe("does not have romeo and juliet quest items");
+                                    Bank.depositInventory();
+
                                 }
 
                             } else {

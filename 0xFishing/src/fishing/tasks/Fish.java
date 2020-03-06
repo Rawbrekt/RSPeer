@@ -2,6 +2,7 @@ package fishing.tasks;
 
 import fishing.data.Fishtype;
 import org.rspeer.runetek.adapter.scene.Npc;
+import org.rspeer.runetek.api.Game;
 import org.rspeer.runetek.api.commons.math.Random;
 import org.rspeer.runetek.api.component.tab.Inventory;
 import org.rspeer.runetek.api.component.tab.Skill;
@@ -11,11 +12,10 @@ import org.rspeer.runetek.api.scene.Npcs;
 import org.rspeer.runetek.api.scene.Players;
 import org.rspeer.script.task.Task;
 
-import static fishing.ZeroxFishing.fishtype;
-import static fishing.ZeroxFishing.tutProgress;
-
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
+
+import static fishing.ZeroxFishing.*;
 
 
 public class Fish extends Task {
@@ -25,16 +25,14 @@ public class Fish extends Task {
 
     @Override
     public boolean validate() {
-
-        if (fishtype.getFishingArea().contains(Players.getLocal()) && Inventory.contains(fishtype.getItem()) && fishtype.getBait() == 0 && tutProgress == 1000) {
-            return true;
-        } else if (fishtype.getFishingArea().contains(Players.getLocal()) && Inventory.contains(fishtype.getItem()) && Inventory.contains(fishtype.getBait()) && !(fishtype.getBait() == 0) && tutProgress == 1000) {
-            return true;
-        } else {
-            return false;
+            if (Game.isLoggedIn() && !Game.isLoadingRegion() && questsFinished() && fishtype.getFishingArea().contains(Players.getLocal()) && Inventory.contains(fishtype.getItem()) && fishtype.getBait() == 0 && tutProgress == 1000) {
+                return true;
+            } else if (Game.isLoggedIn() && !Game.isLoadingRegion() && questsFinished() && fishtype.getFishingArea().contains(Players.getLocal()) && Inventory.contains(fishtype.getItem()) && Inventory.contains(fishtype.getBait()) && !(fishtype.getBait() == 0) && tutProgress == 1000) {
+                return true;
+            } else {
+                return false;
+            }
         }
-
-    }
 
     @Override
     public int execute() {
@@ -44,7 +42,7 @@ public class Fish extends Task {
 
         if (fishtype == newFish) {
 
-            Predicate<Npc> fishSpotPred =  f -> f.containsAction(fishtype.getMethod());
+            Predicate<Npc> fishSpotPred = f -> f.containsAction(fishtype.getMethod());
             Npc fishSpot = Npcs.getNearest(fishSpotPred);
 
             if (!(fishSpot == null) && !isAnimating() && fishtype.getFishingArea().contains(Players.getLocal())) {

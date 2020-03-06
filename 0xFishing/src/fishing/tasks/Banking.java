@@ -2,6 +2,7 @@ package fishing.tasks;
 
 import fishing.data.Fishtype;
 import org.rspeer.runetek.adapter.scene.SceneObject;
+import org.rspeer.runetek.api.Game;
 import org.rspeer.runetek.api.commons.Time;
 import org.rspeer.runetek.api.commons.math.Random;
 import org.rspeer.runetek.api.component.Bank;
@@ -12,6 +13,7 @@ import org.rspeer.runetek.api.scene.SceneObjects;
 import org.rspeer.script.task.Task;
 
 import java.util.function.Predicate;
+
 import static fishing.ZeroxFishing.fishtype;
 import static fishing.ZeroxFishing.questsFinished;
 import static fishing.ZeroxFishing.tutProgress;
@@ -20,7 +22,7 @@ public class Banking extends Task {
 
     @Override
     public boolean validate() {
-        return questsFinished() && shouldBank() && tutProgress == 1000;
+        return Game.isLoggedIn() && !Game.isLoadingRegion() && questsFinished() && shouldBank() && tutProgress == 1000;
     }
 
     @Override
@@ -32,8 +34,8 @@ public class Banking extends Task {
                     if (!Inventory.contains(fishtype.getItem())) {
                         if (!Inventory.isEmpty()) {
                             Bank.depositAllExcept(fishtype.getItem());
-                            Time.sleepUntil(() -> Inventory.isEmpty(), Random.nextInt(1500,2750));
-                        } else{
+                            Time.sleepUntil(() -> Inventory.isEmpty(), Random.nextInt(1500, 2750));
+                        } else {
                             Bank.withdraw(fishtype.getItem(), 1);
                             Time.sleepUntil(() -> Inventory.contains(fishtype.getItem()), Random.nextInt(2000, 3000));
                         }
@@ -64,7 +66,7 @@ public class Banking extends Task {
                 } else {
 
                     DepositBox.depositAllExcept(fishtype.getItem(), fishtype.getBait());
-                    Time.sleepUntil(() -> Inventory.getFreeSlots() == 26, Random.nextInt(1000,2000));
+                    Time.sleepUntil(() -> Inventory.getFreeSlots() == 26, Random.nextInt(1000, 2000));
                     /*Item[] items = DepositBox.getItems();
 
                     Set<Integer> UniqueIDs = new LinkedHashSet<Integer>();
