@@ -1,6 +1,7 @@
 package fishlooting;
 
 import fishlooting.tasks.*;
+import org.rspeer.RSPeer;
 import org.rspeer.runetek.api.ClientSupplier;
 import org.rspeer.runetek.api.Varps;
 import org.rspeer.runetek.api.movement.position.Area;
@@ -37,7 +38,8 @@ public class ZeroxFishlooting extends TaskScript implements ChatMessageListener,
     public static int tutProgress;
     public static String currentTask;
     private static Scanner x;
-    private static boolean banned;
+    private static boolean banned = false;
+    private static boolean invalidCredentials = false;
     private long startTime;
     public static long lastFish;
 
@@ -65,7 +67,7 @@ public class ZeroxFishlooting extends TaskScript implements ChatMessageListener,
         long runningTime = System.currentTimeMillis() - startTime;
         Log.info(formatTime(runningTime));
 
-        if (!banned) {
+        if (!banned && !invalidCredentials) {
             String username = ClientSupplier.get().getUsername();
             String status = "new";
             updateStatus(username,status);
@@ -80,6 +82,19 @@ public class ZeroxFishlooting extends TaskScript implements ChatMessageListener,
             String status = "banned";
             updateStatus(username,status);
             banned = true;
+        }
+        if (response == LoginResponseEvent.Response.INVALID_CREDENTIALS) {
+            String username = ClientSupplier.get().getUsername();
+            String status = "invalid_credentials";
+            updateStatus(username,status);
+            invalidCredentials = true;
+            RSPeer.shutdown();
+        }
+        if (response == LoginResponseEvent.Response.RUNESCAPE_UPDATE || response == LoginResponseEvent.Response.RUNESCAPE_UPDATE_2) {
+            String username = ClientSupplier.get().getUsername();
+            String status = "new";
+            updateStatus(username,status);
+            RSPeer.shutdown();
         }
     }
 

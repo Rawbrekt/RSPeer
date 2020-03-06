@@ -7,10 +7,14 @@ import org.rspeer.runetek.api.Worlds;
 import org.rspeer.runetek.api.commons.Time;
 import org.rspeer.runetek.api.commons.math.Random;
 import org.rspeer.runetek.api.component.Bank;
+import org.rspeer.runetek.api.component.Interfaces;
 import org.rspeer.runetek.api.component.Trade;
 import org.rspeer.runetek.api.component.WorldHopper;
 import org.rspeer.runetek.api.component.chatter.BefriendedPlayers;
 import org.rspeer.runetek.api.component.tab.Inventory;
+import org.rspeer.runetek.api.component.tab.Tab;
+import org.rspeer.runetek.api.component.tab.Tabs;
+import org.rspeer.runetek.api.input.Keyboard;
 import org.rspeer.runetek.api.movement.Movement;
 import org.rspeer.runetek.api.movement.position.Position;
 import org.rspeer.runetek.api.scene.Players;
@@ -28,6 +32,12 @@ public class Mule extends Task {
     @Override
     public boolean validate() {
 
+        if (BefriendedPlayers.getCount() == 0) {
+            // Add mule as friend for muling control
+            addFriend(MULE_NAME);
+            Time.sleepUntil(() -> BefriendedPlayers.getCount() == 1, Random.nextInt(4000, 4500));
+
+        }
         return !muled && BefriendedPlayers.getFirst(MULE_NAME).getWorld() == MULE_WORLD_INT && tutProgress == 1000;
     }
 
@@ -120,5 +130,20 @@ public class Mule extends Task {
                 Time.sleepUntil(() -> Trade.isOpen(), Random.nextInt(7000, 10000));
             }
         }
+    }
+
+    public static void addFriend(String name) {
+        // Open friendslist if not open
+        if (!Tabs.isOpen(Tab.FRIENDS_LIST)) {
+            Tabs.open(Tab.FRIENDS_LIST);
+            Time.sleepUntil(() -> Tabs.isOpen(Tab.FRIENDS_LIST), Random.nextInt(2000, 2500));
+        }
+
+        // Add mule as friend
+        Interfaces.getComponent(429, 14).interact("Add Friend");
+        Time.sleepUntil(() -> Interfaces.getComponent(162, 45).getText().contains("*"), Random.nextInt(2000, 2500));
+        Keyboard.sendText(name);
+        Time.sleepUntil(() -> Interfaces.getComponent(162, 45).getText().contains(MULE_NAME), Random.nextInt(2000, 2500));
+        Keyboard.pressEnter();
     }
 }

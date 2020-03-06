@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="0xMTA:jar">
+    <output-path>$PROJECT_DIR$/../RSPeer/scripts</output-path>
+    <root id="archive" name="0xMTA.jar">
+      <element id="module-output" name="0xMTA" />
+    </root>
+  </artifact>
+</component>

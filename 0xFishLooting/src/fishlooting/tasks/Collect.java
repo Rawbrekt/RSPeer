@@ -1,10 +1,8 @@
 package fishlooting.tasks;
 
-import org.rspeer.runetek.api.Worlds;
 import org.rspeer.runetek.api.commons.math.Random;
 import org.rspeer.runetek.adapter.scene.Pickable;
 import org.rspeer.runetek.api.commons.Time;
-import org.rspeer.runetek.api.component.WorldHopper;
 import org.rspeer.runetek.api.component.tab.Inventory;
 import org.rspeer.runetek.api.movement.Movement;
 import org.rspeer.runetek.api.scene.Pickables;

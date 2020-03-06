@@ -59,6 +59,10 @@ public class TutIsland extends Task {
 
         Log.info("" + tutProgress);
 
+        if (tutProgress > 1) {
+            doBasics();
+        }
+
         switch (tutProgress) {
             case 1:
                 // Account name and looks
@@ -504,7 +508,7 @@ public class TutIsland extends Task {
                     if (Interfaces.getComponent(263, 1, 0).isVisible()) {
                         Interfaces.getComponent(558, 7).interact("Look up name");
                     } else {
-                        String username = nameGeneator();
+                        String username = nameGenerator();
                         Keyboard.sendText(username);
                         Time.sleepUntil(() -> Interfaces.getComponent(162, 45).getText().contains(username), Random.nextInt(2000, 3000));
                         Keyboard.pressEnter();
@@ -594,7 +598,7 @@ public class TutIsland extends Task {
         }
     }
 
-    private static void addFriend(String name) {
+    public static void addFriend(String name) {
         // Open friendslist if not open
         if (!Tabs.isOpen(Tab.FRIENDS_LIST)) {
             Tabs.open(Tab.FRIENDS_LIST);
@@ -609,31 +613,7 @@ public class TutIsland extends Task {
         Keyboard.pressEnter();
     }
 
-    private static void readyInventory() {
-
-        // Wield pickaxe
-        Log.info("Equipping pickaxe");
-        if (Inventory.contains(1265)) {
-            Inventory.getFirst(1265).interact(a -> true);
-            Time.sleepUntil(() -> !Inventory.contains("Bronze pickaxe"), Random.nextInt(2000, 2500));
-        }
-
-        // Clear inventory
-        Item[] items = Inventory.getItems();
-        for (Item item : items) {
-            if (!item.getName().equals("Bronze pickaxe")) {
-                item.interact("Drop");
-                Time.sleep(Random.nextInt(500, 1000));
-            }
-        }
-
-        Time.sleepUntil(() -> Inventory.isEmpty(), Random.nextInt(2000, 2500));
-        if (Inventory.isEmpty()) {
-            inventoryReady = true;
-        }
-    }
-
-    public String nameGeneator() {
+    public String nameGenerator() {
 
         final String lexicon = "ABCDEFGHIJKLMNOPQRSTUVWXYZ12345674890";
         final java.util.Random rand = new java.util.Random();
@@ -650,5 +630,35 @@ public class TutIsland extends Task {
             }
         }
         return builder.toString();
+    }
+
+    public static void handleICantReachThatScreen() {
+        InterfaceComponent iCantReachThat = Interfaces.getComponent(162, 44);
+        InterfaceComponent clickToContinue = Interfaces.getComponent(162, 45);
+        if (iCantReachThat.isVisible()) {
+            if (clickToContinue.isVisible()) {
+                Game.getClient().fireScriptEvent(299, 1, 1);
+            }
+        }
+    }
+
+    public static void doDialog() {
+        if (Dialog.canContinue()) {
+            Dialog.processContinue();
+        }
+    }
+
+    public static void toggleRun() {
+        if (!Movement.isRunEnabled()) {
+            if (Movement.getRunEnergy() > 20) {
+                Movement.toggleRun(true);
+            }
+        }
+    }
+
+    public static void doBasics() {
+        handleICantReachThatScreen();
+        doDialog();
+        toggleRun();
     }
 }

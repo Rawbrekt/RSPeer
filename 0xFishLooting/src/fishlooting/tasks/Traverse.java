@@ -1,5 +1,6 @@
 package fishlooting.tasks;
 
+import org.rspeer.runetek.api.Game;
 import org.rspeer.runetek.api.Worlds;
 import org.rspeer.runetek.api.commons.math.Random;
 import org.rspeer.runetek.api.component.WorldHopper;
@@ -28,12 +29,22 @@ public class Traverse extends Task {
         currentTask = "Walking";
 
         if (Worlds.getCurrent() == MULE_WORLD_INT) {
-            WorldHopper.randomHopInF2p();
+            WorldHopper.randomHop(world -> world.getId() != Game.getClient().getCurrentWorld()
+                    && !world.isBounty()
+                    && !world.isDeadman()
+                    && !world.isHighRisk()
+                    && !world.isLastManStanding()
+                    && !world.isMembers()
+                    && !world.isPVP()
+                    && !world.isSeasonDeadman()
+                    && !world.isSkillTotal()
+                    && !world.isTournament()
+            );
+        } else {
+            checkRunEnergy();
+            Movement.walkToRandomized(traverseToBank() ? bankArea.getCenter() : lootArea.getCenter());
         }
-
-        checkRunEnergy();
-        Movement.walkToRandomized(traverseToBank() ? bankArea.getCenter() : lootArea.getCenter());
-        return Random.nextInt(750, 3250);
+        return Random.nextInt(750, 1500);
     }
 
     private void checkRunEnergy() {
