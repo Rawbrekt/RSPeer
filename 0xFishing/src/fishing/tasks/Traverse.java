@@ -174,7 +174,6 @@ public class Traverse extends Task {
                 }
             }
         }
-
         return false;
     }
 

@@ -1,8 +1,10 @@
 package fishlooting.tasks;
 
+import org.rspeer.runetek.api.ClientSupplier;
 import org.rspeer.runetek.api.Game;
 import org.rspeer.runetek.api.Worlds;
 import org.rspeer.runetek.api.commons.math.Random;
+import org.rspeer.runetek.api.component.Dialog;
 import org.rspeer.runetek.api.component.WorldHopper;
 import org.rspeer.runetek.api.component.tab.Inventory;
 import org.rspeer.runetek.api.movement.Movement;
@@ -27,6 +29,14 @@ public class Traverse extends Task {
     public int execute() {
 
         currentTask = "Walking";
+
+        String username = ClientSupplier.get().getUsername();
+        String status = "running";
+        updateStatus(username, status);
+
+        if (Dialog.canContinue()) {
+            Dialog.processContinue();
+        }
 
         if (Worlds.getCurrent() == MULE_WORLD_INT) {
             WorldHopper.randomHop(world -> world.getId() != Game.getClient().getCurrentWorld()

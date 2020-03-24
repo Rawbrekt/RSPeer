@@ -2,7 +2,6 @@ package fishing.tasks;
 
 import org.rspeer.runetek.adapter.Interactable;
 import org.rspeer.runetek.adapter.component.InterfaceComponent;
-import org.rspeer.runetek.adapter.component.Item;
 import org.rspeer.runetek.adapter.scene.Npc;
 import org.rspeer.runetek.adapter.scene.SceneObject;
 import org.rspeer.runetek.api.Game;
@@ -39,7 +38,6 @@ import static fishing.ZeroxFishing.tutProgress;
 public class TutIsland extends Task {
 
     private boolean runToggled = false;
-    private static boolean inventoryReady = false;
 
     @Override
     public boolean validate() {
@@ -615,7 +613,7 @@ public class TutIsland extends Task {
 
     public String nameGenerator() {
 
-        final String lexicon = "ABCDEFGHIJKLMNOPQRSTUVWXYZ12345674890";
+        final String lexicon = "abcdefghijklmnopqrstuvwxyz 12345674890";
         final java.util.Random rand = new java.util.Random();
         final Set<String> identifiers = new HashSet<String>();
 

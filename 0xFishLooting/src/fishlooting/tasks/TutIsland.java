@@ -4,6 +4,7 @@ import org.rspeer.runetek.adapter.Interactable;
 import org.rspeer.runetek.adapter.component.InterfaceComponent;
 import org.rspeer.runetek.adapter.scene.Npc;
 import org.rspeer.runetek.adapter.scene.SceneObject;
+import org.rspeer.runetek.api.ClientSupplier;
 import org.rspeer.runetek.api.Game;
 import org.rspeer.runetek.api.Varps;
 import org.rspeer.runetek.api.commons.Time;
@@ -31,10 +32,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Predicate;
 
-import static fishlooting.ZeroxFishlooting.MULE_NAME;
-import static fishlooting.ZeroxFishlooting.V_TUTISLAND;
-import static fishlooting.ZeroxFishlooting.tutProgress;
-import static fishlooting.ZeroxFishlooting.currentTask;
+import static fishlooting.ZeroxFishlooting.*;
 
 public class TutIsland extends Task {
 
@@ -58,7 +56,18 @@ public class TutIsland extends Task {
         combatLadderLocation = Area.rectangular(new Position(3111, 9525, 0), new Position(3111, 9525, 0));
         magicLocation = Area.rectangular(new Position(3141, 3088, 0), new Position(3141, 3088, 0));
 
+        String username = ClientSupplier.get().getUsername();
+        String status = "running";
+        updateStatus(username, status);
+
+
+        if (tutProgress > 1) {
+            doBasics();
+        }
+
         switch (tutProgress) {
+
+
             case 1:
                 // Account name and looks
                 createCharacter();
@@ -503,7 +512,7 @@ public class TutIsland extends Task {
                     if (Interfaces.getComponent(263, 1, 0).isVisible()) {
                         Interfaces.getComponent(558, 7).interact("Look up name");
                     } else {
-                        String username = nameGeneator();
+                        String username = nameGenerator();
                         Keyboard.sendText(username);
                         Time.sleepUntil(() -> Interfaces.getComponent(162, 45).getText().contains(username), Random.nextInt(2000, 3000));
                         Keyboard.pressEnter();
@@ -608,9 +617,9 @@ public class TutIsland extends Task {
         Keyboard.pressEnter();
     }
 
-    public String nameGeneator() {
+    public String nameGenerator() {
 
-        final String lexicon = "abcdefghijklmnopqrstuvwxyz12345674890 ";
+        final String lexicon = "abcdefghijklmnopqrstuvwxyz 12345674890 ";
         final java.util.Random rand = new java.util.Random();
         final Set<String> identifiers = new HashSet<String>();
 
@@ -625,5 +634,34 @@ public class TutIsland extends Task {
             }
         }
         return builder.toString();
+    }
+    public static void handleICantReachThatScreen() {
+        InterfaceComponent iCantReachThat = Interfaces.getComponent(162, 44);
+        InterfaceComponent clickToContinue = Interfaces.getComponent(162, 45);
+        if (iCantReachThat.isVisible()) {
+            if (clickToContinue.isVisible()) {
+                Game.getClient().fireScriptEvent(299, 1, 1);
+            }
+        }
+    }
+
+    public static void doDialog() {
+        if (Dialog.canContinue()) {
+            Dialog.processContinue();
+        }
+    }
+
+    public static void toggleRun() {
+        if (!Movement.isRunEnabled()) {
+            if (Movement.getRunEnergy() > 20) {
+                Movement.toggleRun(true);
+            }
+        }
+    }
+
+    public static void doBasics() {
+        handleICantReachThatScreen();
+        doDialog();
+        toggleRun();
     }
 }

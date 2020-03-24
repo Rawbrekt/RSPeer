@@ -27,7 +27,7 @@ import java.util.concurrent.TimeUnit;
 
 @ScriptMeta(name = "0xFishLooter", desc = "Tries to loot fish.", category = ScriptCategory.MONEY_MAKING, developer = "0xRip", version = 0.1)
 
-public class ZeroxFishlooting extends TaskScript implements ChatMessageListener, RenderListener,LoginResponseListener {
+public class ZeroxFishlooting extends TaskScript implements ChatMessageListener, RenderListener, LoginResponseListener {
 
     public static boolean muled = false;
     public static boolean banked = false;
@@ -37,6 +37,7 @@ public class ZeroxFishlooting extends TaskScript implements ChatMessageListener,
     public static int V_TUTISLAND = 281;
     public static int tutProgress;
     public static String currentTask;
+    public static String accountStatus;
     private static Scanner x;
     private static boolean banned = false;
     private static boolean invalidCredentials = false;
@@ -56,10 +57,6 @@ public class ZeroxFishlooting extends TaskScript implements ChatMessageListener,
         tutProgress = Varps.get(V_TUTISLAND);
         submit(TASKS);
 
-        String username = ClientSupplier.get().getUsername();
-        String status = "running";
-        updateStatus(username,status);
-
     }
 
     @Override
@@ -70,7 +67,7 @@ public class ZeroxFishlooting extends TaskScript implements ChatMessageListener,
         if (!banned && !invalidCredentials) {
             String username = ClientSupplier.get().getUsername();
             String status = "new";
-            updateStatus(username,status);
+            updateStatus(username, status);
         }
     }
 
@@ -80,27 +77,27 @@ public class ZeroxFishlooting extends TaskScript implements ChatMessageListener,
         if (response == LoginResponseEvent.Response.ACCOUNT_DISABLED) {
             String username = ClientSupplier.get().getUsername();
             String status = "banned";
-            updateStatus(username,status);
+            updateStatus(username, status);
             banned = true;
         }
         if (response == LoginResponseEvent.Response.INVALID_CREDENTIALS) {
             String username = ClientSupplier.get().getUsername();
             String status = "invalid_credentials";
-            updateStatus(username,status);
+            updateStatus(username, status);
             invalidCredentials = true;
             RSPeer.shutdown();
         }
         if (response == LoginResponseEvent.Response.RUNESCAPE_UPDATE || response == LoginResponseEvent.Response.RUNESCAPE_UPDATE_2) {
             String username = ClientSupplier.get().getUsername();
             String status = "new";
-            updateStatus(username,status);
+            updateStatus(username, status);
             RSPeer.shutdown();
         }
     }
 
     @Override
     public void notify(ChatMessageEvent msg) {
-        if(msg.getMessage().contains("Accepted trade")) {
+        if (msg.getMessage().contains("Accepted trade")) {
             muled = true;
             banked = false;
             Log.info("trade done");
@@ -113,7 +110,7 @@ public class ZeroxFishlooting extends TaskScript implements ChatMessageListener,
 
     }
 
-    private String formatTime(long r){
+    private String formatTime(long r) {
 
         //long days = TimeUnit.MILLISECONDS.toDays(r);
         long hours = TimeUnit.MILLISECONDS.toHours(r);
@@ -121,22 +118,19 @@ public class ZeroxFishlooting extends TaskScript implements ChatMessageListener,
         long seconds = TimeUnit.MILLISECONDS.toSeconds(r) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(r));
         String res = "";
 
-        if( hours < 10 ){
+        if (hours < 10) {
             res = res + "0" + hours + ":";
-        }
-        else{
+        } else {
             res = res + hours + ":";
         }
-        if(minutes < 10){
+        if (minutes < 10) {
             res = res + "0" + minutes + ":";
-        }
-        else{
+        } else {
             res = res + minutes + ":";
         }
-        if(seconds < 10){
+        if (seconds < 10) {
             res = res + "0" + seconds;
-        }
-        else{
+        } else {
             res = res + seconds;
         }
 
@@ -158,43 +152,46 @@ public class ZeroxFishlooting extends TaskScript implements ChatMessageListener,
     }
 
     public static void updateStatus(String searchUsername, String newStatus) {
-        String filepath = "C:\\Users\\Riprekt\\Documents\\RSPeer\\account creator\\accounts.csv";
-        String username = ""; String password = ""; String status = "";
-        String tempfile = "temp.txt";
-        File oldFile = new File(filepath);
-        File newFile = new File(tempfile);
+
+        if (newStatus != accountStatus) {
+            String filepath = "C:\\Users\\Riprekt\\Documents\\RSPeer\\account creator\\accounts.csv";
+            String username = "";
+            String password = "";
+            String status = "";
+            String tempfile = "temp.txt";
+            File oldFile = new File(filepath);
+            File newFile = new File(tempfile);
 
 
-        try {
-            FileWriter fw = new FileWriter(tempfile,true);
-            BufferedWriter bw = new BufferedWriter(fw);
-            PrintWriter pw = new PrintWriter(bw);
+            try {
+                FileWriter fw = new FileWriter(tempfile, true);
+                BufferedWriter bw = new BufferedWriter(fw);
+                PrintWriter pw = new PrintWriter(bw);
 
-            x = new Scanner(new File(filepath));
-            x.useDelimiter("[,\n\r]");
+                x = new Scanner(new File(filepath));
+                x.useDelimiter("[,\n\r]");
 
-            while (x.hasNext()) {
-                username = x.next();
-                password = x.next();
-                status = x.next();
+                while (x.hasNext()) {
+                    username = x.next();
+                    password = x.next();
+                    status = x.next();
 
-                if (username.equals(searchUsername)) {
-                    pw.print(username + "," + password + "," + newStatus + "\n");
-                } else {
-                    pw.print(username + "," + password + "," + status + "\n");
+                    if (username.equals(searchUsername)) {
+                        pw.print(username + "," + password + "," + newStatus + "\n");
+                    } else {
+                        pw.print(username + "," + password + "," + status + "\n");
+                    }
                 }
+                x.close();
+                pw.flush();
+                pw.close();
+                oldFile.delete();
+                File dump = new File(filepath);
+                newFile.renameTo(dump);
+                accountStatus = newStatus;
+            } catch (Exception e) {
+                System.out.println("Error");
             }
-            x.close();
-            pw.flush();
-            pw.close();
-            oldFile.delete();
-            File dump = new File(filepath);
-            newFile.renameTo(dump);
         }
-        catch (Exception e) {
-            System.out.println("Error");
-        }
-
-
     }
 }

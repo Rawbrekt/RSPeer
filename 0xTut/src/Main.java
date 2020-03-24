@@ -45,9 +45,6 @@ public class Main extends Script {
     @Override
     public int loop() {
 
-        InterfaceComponent iCantReachThat = Interfaces.getComponent(162,44);
-        InterfaceComponent clickToContinue = Interfaces.getComponent(162,45);
-
         tutProgress = Varps.get(V_TUTISLAND);
         boolean doDefault = false;
         Predicate<String> defaultAction = a -> true;
@@ -57,11 +54,9 @@ public class Main extends Script {
         combatLadderLocation = Area.rectangular(new Position(3111, 9525, 0), new Position(3111, 9525, 0));
         magicLocation = Area.rectangular(new Position(3141, 3088, 0), new Position(3141, 3088, 0));
 
-        /*if(iCantReachThat.isVisible()){
-            if(clickToContinue.isVisible()) {
-                Game.getClient().fireScriptEvent(299, 1, 1);
-            }
-        }*/
+        if (tutProgress > 1) {
+            doBasics();
+        }
 
         switch (tutProgress) {
             case 1:
@@ -510,7 +505,7 @@ public class Main extends Script {
                     if (Interfaces.getComponent(263, 1, 0).isVisible()) {
                         Interfaces.getComponent(558, 7).interact("Look up name");
                     } else {
-                        String username = nameGeneator();
+                        String username = nameGenerator();
                         Keyboard.sendText(username);
                         Time.sleepUntil(() -> Interfaces.getComponent(162, 45).getText().contains(username), Random.nextInt(2000, 3000));
                         Keyboard.pressEnter();
@@ -615,9 +610,9 @@ public class Main extends Script {
         Keyboard.pressEnter();
     }
 
-    public String nameGeneator() {
+    public String nameGenerator() {
 
-        final String lexicon = "ABCDEFGHIJKLMNOPQRSTUVWXYZ12345674890";
+        final String lexicon = "abcdefghijklmnopqrstuvwxyz 12345674890";
         final java.util.Random rand = new java.util.Random();
         final Set<String> identifiers = new HashSet<String>();
 
@@ -632,5 +627,35 @@ public class Main extends Script {
             }
         }
         return builder.toString();
+    }
+
+    public static void doBasics() {
+        handleICantReachThatScreen();
+        doDialog();
+        toggleRun();
+    }
+
+    public static void handleICantReachThatScreen() {
+        InterfaceComponent iCantReachThat = Interfaces.getComponent(162, 44);
+        InterfaceComponent clickToContinue = Interfaces.getComponent(162, 45);
+        if (iCantReachThat.isVisible()) {
+            if (clickToContinue.isVisible()) {
+                Game.getClient().fireScriptEvent(299, 1, 1);
+            }
+        }
+    }
+
+    public static void doDialog() {
+        if (Dialog.canContinue()) {
+            Dialog.processContinue();
+        }
+    }
+
+    public static void toggleRun() {
+        if (!Movement.isRunEnabled()) {
+            if (Movement.getRunEnergy() > 20) {
+                Movement.toggleRun(true);
+            }
+        }
     }
 }

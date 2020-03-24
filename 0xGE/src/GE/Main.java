@@ -6,13 +6,18 @@ import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 import org.json.JSONObject;
+import org.rspeer.runetek.adapter.scene.Pickable;
+import org.rspeer.runetek.adapter.scene.SceneObject;
 import org.rspeer.runetek.api.component.tab.Skill;
 import org.rspeer.runetek.api.component.tab.Skills;
+import org.rspeer.runetek.api.scene.Pickables;
 import org.rspeer.runetek.api.scene.Players;
+import org.rspeer.runetek.api.scene.SceneObjects;
 import org.rspeer.runetek.event.types.LoginResponseEvent;
 import org.rspeer.script.Script;
 import org.rspeer.script.ScriptCategory;
 import org.rspeer.script.ScriptMeta;
+import org.rspeer.ui.Log;
 
 import java.net.URISyntaxException;
 
@@ -91,6 +96,11 @@ public class Main extends Script {
 
     @Override
     public int loop() {
+
+        SceneObject bucket = SceneObjects.getNearest("Bucket");
+        if (bucket != null) {
+            Log.info("Found bucket");
+        }
 
         //getting user data
         String name = Players.getLocal().getName();

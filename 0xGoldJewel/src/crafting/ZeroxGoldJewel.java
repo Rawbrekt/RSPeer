@@ -25,6 +25,7 @@ public class ZeroxGoldJewel extends TaskScript implements RenderListener, SkillL
 
     public static Jewellery toCraft;
     private long startTime;
+    public static String currentTask;
     public long amountCrafted = 0;
     public static Area bankArea = Area.rectangular(3091, 3498, 3098, 3488);
     public static Area furnaceArea = Area.rectangular(3105, 3501, 3110, 3496);
@@ -50,6 +51,7 @@ public class ZeroxGoldJewel extends TaskScript implements RenderListener, SkillL
         g2d.drawString("Runtime: " + formatTime(runningTime), 20, 40);
         g2d.drawString("Crafted: " + amountCrafted, 20, 60);
         g2d.drawString("Per hour: " + amountCrafted*3600000/(runningTime+1), 20, 80);
+        g2d.drawString("Task: " + currentTask, 20, 100);
     }
 
     private String formatTime(long r){

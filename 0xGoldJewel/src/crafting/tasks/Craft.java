@@ -11,6 +11,8 @@ import org.rspeer.runetek.api.component.tab.Inventory;
 import org.rspeer.runetek.api.scene.Players;
 import org.rspeer.runetek.api.scene.SceneObjects;
 import org.rspeer.script.task.Task;
+import org.rspeer.ui.Log;
+
 import static crafting.ZeroxGoldJewel.furnaceArea;
 import static crafting.ZeroxGoldJewel.toCraft;
 
@@ -21,27 +23,32 @@ public class Craft extends Task {
 
     @Override
     public boolean validate() {
-        return (ZeroxGoldJewel.toCraft != null) && furnaceArea.contains(Players.getLocal()) && Inventory.contains(toCraft.getRawMaterial()) && Inventory.contains(toCraft.getMould());
+        if(toCraft.getGem() == 0) {
+            return (ZeroxGoldJewel.toCraft != null) && furnaceArea.contains(Players.getLocal()) && Inventory.contains(toCraft.getRawMaterial()) && Inventory.contains(toCraft.getMould());
+        } else {
+            return (ZeroxGoldJewel.toCraft != null) && furnaceArea.contains(Players.getLocal()) && Inventory.contains(toCraft.getRawMaterial()) && Inventory.contains(toCraft.getMould()) && Inventory.contains(toCraft.getGem());
+        }
+
     }
 
     @Override
     public int execute() {
 
+        ZeroxGoldJewel.currentTask = "Crafting";
+
         SceneObject FURNACE = SceneObjects.getNearest(16469);
         if (!(FURNACE == null)) {
             if (!isAnimating()) {
                 InterfaceComponent jewelleryCreation = Interfaces.getComponent(446,0);
-                if (jewelleryCreation == null) {
+                if (jewelleryCreation == null || !jewelleryCreation.isVisible()) {
                     FURNACE.interact("Smelt");
-                    Time.sleepUntil(() -> (jewelleryCreation != null), Random.nextInt(750, 1500));
+                    Time.sleepUntil(() -> (jewelleryCreation != null || jewelleryCreation.isVisible()), Random.nextInt(750, 1500));
                 } else {
                     CRAFT_ADDRESS.resolve().interact("Make");
                 }
             }
         }
-
         return Random.nextInt(750, 1500);
-
     }
 
     private boolean isAnimating() {

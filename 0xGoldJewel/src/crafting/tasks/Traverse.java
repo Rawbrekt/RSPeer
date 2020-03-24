@@ -7,7 +7,6 @@ import org.rspeer.runetek.api.component.tab.Inventory;
 import org.rspeer.runetek.api.movement.Movement;
 import org.rspeer.runetek.api.scene.Players;
 import org.rspeer.script.task.Task;
-import org.rspeer.ui.Log;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -26,17 +25,27 @@ public class Traverse extends Task {
 
     @Override
     public int execute() {
+        ZeroxGoldJewel.currentTask = "Banking";
         checkRunEnergy();
         Movement.walkToRandomized(traverseToBank() ? bankArea.getCenter() : furnaceArea.getCenter());
         return Random.nextInt(200, 1500);
     }
 
     private boolean traverseToBank() {
-        return (toCraft != null && !bankArea.contains(Players.getLocal()) && (!Inventory.contains(toCraft.getRawMaterial()) || !Inventory.contains(toCraft.getMould())));
+        if (toCraft.getGem() == 0) {
+            return (toCraft != null && !bankArea.contains(Players.getLocal()) && (!Inventory.contains(toCraft.getRawMaterial()) || !Inventory.contains(toCraft.getMould())));
+        } else {
+            return (toCraft != null && !bankArea.contains(Players.getLocal()) && (!Inventory.contains(toCraft.getRawMaterial()) || !Inventory.contains(toCraft.getMould()) || !Inventory.contains(toCraft.getGem())));
+        }
+
     }
 
     private boolean traverseToFurnace() {
-        return (ZeroxGoldJewel.toCraft != null && !furnaceArea.contains(Players.getLocal()) && Inventory.contains(toCraft.getRawMaterial()) && Inventory.contains(toCraft.getMould()));
+        if (toCraft.getGem() == 0) {
+            return (ZeroxGoldJewel.toCraft != null && !furnaceArea.contains(Players.getLocal()) && Inventory.contains(toCraft.getRawMaterial()) && Inventory.contains(toCraft.getMould()));
+        } else {
+            return (ZeroxGoldJewel.toCraft != null && !furnaceArea.contains(Players.getLocal()) && Inventory.contains(toCraft.getRawMaterial()) && Inventory.contains(toCraft.getMould()) && Inventory.contains(toCraft.getGem()));
+        }
     }
 
     private void checkRunEnergy() {
