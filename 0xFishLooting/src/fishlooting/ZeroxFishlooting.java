@@ -43,6 +43,7 @@ public class ZeroxFishlooting extends TaskScript implements ChatMessageListener,
     private static boolean invalidCredentials = false;
     private long startTime;
     public static long lastFish;
+    public static long firstfish;
 
     public static Area bankArea = Area.rectangular(3091, 3498, 3098, 3488);
     public static Area lootArea = Area.rectangular(3100, 3439, 3109, 3423);
